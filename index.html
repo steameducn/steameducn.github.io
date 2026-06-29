@@ -1,403 +1,350 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>虚谷计划 | 中国的开源教育计划</title>
-  <meta name="description" content="虚谷计划是一个包含硬件和软件的开源教育项目，由一线教师联合高校、创客空间和科技企业共同发起。">
-  <meta property="og:title" content="虚谷计划 | 中国的开源教育计划">
-  <meta property="og:description" content="虚谷计划是一个包含硬件和软件的开源教育项目。">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全国中小学STEAM教育大会</title>
+    <meta name="description" content="全国中小学STEAM教育大会官方网站，介绍大会历史、历届情况及最新动态。">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <!-- Navigation -->
-  <header class="site-header" id="header">
-    <div class="container nav-container">
-      <a class="logo" href="/">
-        <span class="logo-mark">虚</span>
-        <span class="logo-text">虚谷计划</span>
-      </a>
-      <nav class="main-nav">
-        <a href="about.html">关于计划</a>
-        <a href="maker.html">创客教育</a>
-        <a href="ai.html">人工智能</a>
-        <a href="#ecosystem">生态伙伴</a>
-        <a href="list.html" class="btn btn-sm btn-outline">项目列表</a>
-      </nav>
-      <button class="menu-toggle" aria-label="菜单" id="menuToggle">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </header>
+    <header class="site-header">
+        <div class="container">
+            <a href="#" class="logo">
+                <span class="logo-icon">S</span>
+                <span class="logo-text">STEAM教育大会</span>
+            </a>
+            <nav class="main-nav">
+                <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-list">
+                    <li><a href="#about">大会简介</a></li>
+                    <li><a href="#history">历史沿革</a></li>
+                    <li><a href="#timeline">历届回顾</a></li>
+                    <li><a href="#features">大会特色</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="about.html">关于计划</a>
-    <a href="maker.html">创客教育</a>
-    <a href="ai.html">人工智能</a>
-    <a href="#ecosystem">生态伙伴</a>
-    <a href="list.html">项目列表</a>
-  </div>
-
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-bg">
-      <div class="gradient-orb orb-1"></div>
-      <div class="gradient-orb orb-2"></div>
-      <div class="gradient-orb orb-3"></div>
-    </div>
-    <div class="container hero-content">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        虚怀若谷，共创未来
-      </div>
-      <h1 class="hero-title">
-        让人工智能与开源硬件<br>
-        <span class="text-gradient">点亮每一间课堂</span>
-      </h1>
-      <p class="hero-desc">
-        虚谷计划是一个包含硬件和软件的开源教育项目，由一线教师联合高校、创客空间和科技企业共同发起，致力于为中国青少年提供完整、开放、可复制、可实践的人工智能与科技教育解决方案。
-      </p>
-      <div class="hero-actions">
-        <a href="maker.html" class="btn btn-primary btn-lg">探索项目</a>
-        <a href="about.html" class="btn btn-ghost btn-lg">了解愿景</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat-item">
-          <div class="stat-number">8</div>
-          <div class="stat-label">核心开源项目</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">2018</div>
-          <div class="stat-label">发起年份</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">3万+</div>
-          <div class="stat-label">教师用户</div>
-        </div>
-      </div>
-    </div>
-    <div class="scroll-hint">
-      <span></span>
-    </div>
-  </section>
-
-  <!-- Projects Scroll -->
-  <section class="section projects-scroll-section" id="projects">
-    <div class="container">
-      <div class="projects-scroll-header">
-        <div>
-          <span class="section-tag">开源教育项目</span>
-          <h2 class="section-title">八大核心项目</h2>
-          <p class="section-subtitle">从创客硬件到人工智能平台，虚谷计划覆盖完整的教育技术生态。</p>
-        </div>
-        <a href="list.html" class="btn btn-primary">查看项目列表</a>
-      </div>
-    </div>
-    <div class="projects-scroll-wrap" id="projectsScrollWrap">
-      <div class="projects-scroll-track" id="projectsScrollTrack">
-        <a href="https://gitee.com/maoyouhui/quickclass-release/" target="_blank" rel="noopener" class="project-scroll-card">
-          <div class="project-scroll-image">
-            <img src="images/quickclass.png" alt="QuickClass">
-          </div>
-          <div class="project-scroll-body">
-            <div class="project-scroll-meta">
-              <span>2026</span>
-              <span class="project-status status-active">持续中</span>
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <p class="hero-subtitle">一年一度 · 坚持公益 · 众师众创</p>
+                <h1>全国中小学STEAM教育大会</h1>
+                <p class="hero-description">从2013年温州的首次论坛出发，十余年间大会始终扎根一线，陪伴全国中小学创客、STEAM、人工智能与跨学科创新教育领域的教师共同成长，成为国内跨学科学习领域最有影响力的教研活动之一。</p>
+                <div class="hero-actions">
+                    <a href="#timeline" class="btn btn-primary">查看历届大会</a>
+                    <a href="#about" class="btn btn-secondary">了解大会</a>
+                </div>
             </div>
-            <h3>QuickClass</h3>
-            <p>一个 AI 驱动的课堂教学辅助平台。</p>
-            <span class="project-scroll-link">访问项目 →</span>
-          </div>
-        </a>
-        <a href="https://quickform.cc/" target="_blank" rel="noopener" class="project-scroll-card">
-          <div class="project-scroll-image">
-            <img src="images/quickform.jpg" alt="QuickForm">
-          </div>
-          <div class="project-scroll-body">
-            <div class="project-scroll-meta">
-              <span>2025</span>
-              <span class="project-status status-active">持续中</span>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">12</span>
+                    <span class="stat-label">届</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">12</span>
+                    <span class="stat-label">座城市</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">11</span>
+                    <span class="stat-label">年历程</span>
+                </div>
             </div>
-            <h3>QuickForm</h3>
-            <p>为 AI 大模型开发交互网页设计的数据服务。</p>
-            <span class="project-scroll-link">访问项目 →</span>
-          </div>
-        </a>
-        <a href="https://openhydra.net/" target="_blank" rel="noopener" class="project-scroll-card">
-          <div class="project-scroll-image">
-            <img src="images/openhydra.png" alt="OpenHydra">
-          </div>
-          <div class="project-scroll-body">
-            <div class="project-scroll-meta">
-              <span>2024</span>
-              <span class="project-status status-active">持续中</span>
-            </div>
-            <h3>OpenHydra</h3>
-            <p>为中小学设计的 AI 教学平台。</p>
-            <span class="project-scroll-link">访问项目 →</span>
-          </div>
-        </a>
-        <a href="https://xedupro.cn/" target="_blank" rel="noopener" class="project-scroll-card">
-          <div class="project-scroll-image">
-            <img src="images/xedu-logo.svg" alt="XEduPro">
-          </div>
-          <div class="project-scroll-body">
-            <div class="project-scroll-meta">
-              <span>2022</span>
-              <span class="project-status status-active">持续中</span>
-            </div>
-            <h3>XEduPro</h3>
-            <p>一套开箱即用的人工智能学习工具。</p>
-            <span class="project-scroll-link">访问项目 →</span>
-          </div>
-        </a>
-        <a href="https://www.vvplan.cn/laserblock/" target="_blank" rel="noopener" class="project-scroll-card">
-          <div class="project-scroll-image">
-            <img src="images/laserblock-logo.jpg" alt="乐造模块">
-          </div>
-          <div class="project-scroll-body">
-            <div class="project-scroll-meta">
-              <span>2020</span>
-              <span class="project-status status-active">持续中</span>
-            </div>
-            <h3>乐造模块</h3>
-            <p>利用激光切割技术加工的木质结构件。</p>
-            <span class="project-scroll-link">访问项目 →</span>
-          </div>
-        </a>
-        <a href="https://www.vvplan.cn/vvlink/" target="_blank" rel="noopener" class="project-scroll-card">
-          <div class="project-scroll-image">
-            <img src="images/vvlink-logo.jpg" alt="虚谷物联">
-          </div>
-          <div class="project-scroll-body">
-            <div class="project-scroll-meta">
-              <span>2019</span>
-              <span class="project-status status-active">持续中</span>
-            </div>
-            <h3>虚谷物联</h3>
-            <p>一套开箱即用物联网工具包。</p>
-            <span class="project-scroll-link">访问项目 →</span>
-          </div>
-        </a>
-        <a href="https://www.vvplan.cn/vvboard/" target="_blank" rel="noopener" class="project-scroll-card">
-          <div class="project-scroll-image">
-            <img src="images/vvboard-logo.jpg" alt="虚谷号">
-          </div>
-          <div class="project-scroll-body">
-            <div class="project-scroll-meta">
-              <span>2018</span>
-              <span class="project-status status-stopped">已停止</span>
-            </div>
-            <h3>虚谷号</h3>
-            <p>一款能运行 Python 的开源硬件。</p>
-            <span class="project-scroll-link">访问项目 →</span>
-          </div>
-        </a>
-        <a href="https://www.vvplan.cn/handpy/" target="_blank" rel="noopener" class="project-scroll-card">
-          <div class="project-scroll-image">
-            <img src="images/handpy-logo.jpg" alt="掌控板">
-          </div>
-          <div class="project-scroll-body">
-            <div class="project-scroll-meta">
-              <span>2018</span>
-              <span class="project-status status-active">持续中</span>
-            </div>
-            <h3>掌控板</h3>
-            <p>一款集成常见电子模块的开源硬件。</p>
-            <span class="project-scroll-link">访问项目 →</span>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Ecosystem -->
-  <section class="section section-ecosystem" id="ecosystem">
-    <div class="container">
-      <div class="ecosystem-inner">
-        <div class="ecosystem-content">
-          <span class="section-tag">生态伙伴</span>
-          <h2 class="section-title">携手共建<br>开源教育未来</h2>
-          <p>虚谷计划的成长离不开一线教育工作者的实践反馈、高校研究者的学术支撑、创客空间的社区运营，以及企业工程师的技术贡献。我们期待与更多伙伴一起，让优质的开源教育惠及每一位学生。</p>
-          <div class="ecosystem-actions">
-            <a href="mailto:contact@vvplan.cn" class="btn btn-primary">成为伙伴</a>
-            <a href="list.html" class="btn btn-ghost">查看项目列表</a>
-          </div>
         </div>
-        <div class="ecosystem-roles">
-          <div class="role-card">
-            <strong>一线教师</strong>
-            <span>课程实践 · 案例共创</span>
-          </div>
-          <div class="role-card">
-            <strong>高校院所</strong>
-            <span>学术研究 · 师资培训</span>
-          </div>
-          <div class="role-card">
-            <strong>创客空间</strong>
-            <span>社区运营 · 活动组织</span>
-          </div>
-          <div class="role-card">
-            <strong>科技企业</strong>
-            <span>硬件研发 · 技术支持</span>
-          </div>
+    </section>
+
+    <section id="about" class="section about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">ABOUT</span>
+                <h2>大会简介</h2>
+                <p>全国中小学STEAM教育大会由中国电子学会现代教育技术分会主办，是国内跨学科学习领域具有广泛影响力的教研活动。</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="about-icon">🎯</div>
+                    <h3>扎根一线</h3>
+                    <p>大会坚持从一线教师的真实需求出发，汇聚教育专家、校长、教研员与教师，共同探讨教学实践中的真问题。</p>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">🤝</div>
+                    <h3>众师众创</h3>
+                    <p>最早由民间一线教师发起，强调开源、分享与协作，形成了以教师社群为核心的众创生态。</p>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">🚀</div>
+                    <h3>前沿引领</h3>
+                    <p>从创客教育到STEAM教育，再到人工智能教育，大会始终站在中小学科技教育发展的最前沿。</p>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">❤️</div>
+                    <h3>公益开放</h3>
+                    <p>大会始终保持开源、草根、免费的特色，为教育工作者提供平等交流、共享资源的平台。</p>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- CTA -->
-  <section class="section section-cta-large">
-    <div class="container">
-      <div class="cta-card">
-        <h2>开启你的开源教育探索</h2>
-        <p>从一块掌控板、一个 XEduPro 工具开始，和学生一起动手创造未来。</p>
-        <a href="maker.html" class="btn btn-light btn-lg">立即开始</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a class="logo" href="/">
-            <span class="logo-mark">虚</span>
-            <span class="logo-text">虚谷计划</span>
-          </a>
-          <p>中国的开源教育计划，让人工智能与开源硬件点亮每一间课堂。</p>
+    <section id="history" class="section history">
+        <div class="container">
+            <div class="section-header light">
+                <span class="section-tag">HISTORY</span>
+                <h2>历史沿革</h2>
+                <p>从温州中学的第一次研讨活动，到覆盖全国、辐射千人的品牌盛会，大会见证并推动了中国中小学STEAM教育的发展。</p>
+            </div>
+            <div class="history-content">
+                <div class="history-phase">
+                    <span class="phase-year">2013</span>
+                    <div class="phase-body">
+                        <h3>萌芽与发起</h3>
+                        <p>2013年8月，在温州市电教馆支持下，全国第一届中小学STEAM教育研究协作组在温州中学成立，来自全国13个省市的80多位代表共同交流探讨STEAM教育，开启了这一持续十余年的教师盛会。</p>
+                    </div>
+                </div>
+                <div class="history-phase">
+                    <span class="phase-year">2014-2017</span>
+                    <div class="phase-body">
+                        <h3>探索与扩展</h3>
+                        <p>大会先后在常州、上海、佛山、蓬莱等地举办，议题从单一的STEAM课程设计拓展到综合实践活动、创客教育、核心素养与课程融合，参与者规模不断扩大。</p>
+                    </div>
+                </div>
+                <div class="history-phase">
+                    <span class="phase-year">2018-2020</span>
+                    <div class="phase-body">
+                        <h3>深化与体系化</h3>
+                        <p>大会进入新阶段，聚焦STEAM教育与创客教育的深度融合、开源生态构建与跨学科实践，并通过线上分会场扩大辐射范围。</p>
+                    </div>
+                </div>
+                <div class="history-phase">
+                    <span class="phase-year">2021-至今</span>
+                    <div class="phase-body">
+                        <h3>人工智能新时代</h3>
+                        <p>从"创客教育与新一代人工智能"到"走向科创输出的人工智能教育"，再到"人工智能教育与创新"，大会持续关注AI时代中小学科技教育的新使命与新路径。</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="footer-links">
-          <h4>热门项目</h4>
-          <a href="/handpy">掌控板</a>
-          <a href="/vvlink">虚谷物联</a>
-          <a href="https://quickform.cc/" target="_blank" rel="noopener">QuickForm</a>
-          <a href="https://xedupro.cn/" target="_blank" rel="noopener">XEduPro</a>
-          <a href="https://openhydra.net/" target="_blank" rel="noopener">OpenHydra</a>
+    </section>
+
+    <section id="timeline" class="section timeline-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">TIMELINE</span>
+                <h2>历届回顾</h2>
+                <p>十二届大会，十余座城市，记录着中国中小学STEAM教育前行的足迹。</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">12</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2024年8月</span>
+                            <span class="timeline-city">贵州 · 遵义</span>
+                        </div>
+                        <h3>第十二届</h3>
+                        <p class="timeline-theme">主题：人工智能教育与创新</p>
+                        <p>大会历时两天，设置了多个专题报告和14个主题工作坊，涵盖中小学人工智能入门、创客实践课程、人工智能在教育领域的应用等内容，吸引了全国各地千余名教育工作者参与。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">11</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2023年12月</span>
+                            <span class="timeline-city">北京 · 海淀</span>
+                        </div>
+                        <h3>第十一届</h3>
+                        <p class="timeline-theme">主题：走向"科创输出"的人工智能教育</p>
+                        <p>来自25个省市的教育专家、校长和一线教师400余人共聚一堂，累计参会约两万四千人次。大会还首次设立年度贡献人物、年度创新人物荣誉称号。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">10</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2022年11月</span>
+                            <span class="timeline-city">浙江 · 温州</span>
+                        </div>
+                        <h3>第十届</h3>
+                        <p class="timeline-theme">主题：创客教育与新一代人工智能</p>
+                        <p>十年后大会再次回到温州，探讨创客教育与新一代人工智能的融合发展，通过大咖讲座、创客故事分享、教育实践案例展示等形式搭建共建共享平台。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">9</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2021年9月</span>
+                            <span class="timeline-city">广东 · 深圳</span>
+                        </div>
+                        <h3>第九届</h3>
+                        <p class="timeline-theme">聚焦：STEAM教育与创客教育融合发展</p>
+                        <p>大会以主题演讲、高峰对话、课程发布、教师工坊、企业专场等方式进行，并设置STEAM教育与创客教育产业技术成果展示专区。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">8</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2020年10-11月</span>
+                            <span class="timeline-city">浙江 · 宁波杭州湾新区</span>
+                        </div>
+                        <h3>第八届</h3>
+                        <p class="timeline-theme">主题：开源生态构建，跨学科实践，促进高素质创新人才培养</p>
+                        <p>大会在杭州湾高端教育装备产业城举行，约200人到场参加，线上设有7个分会场，在线注册观看人数超过千人。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">7</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2019年7月</span>
+                            <span class="timeline-city">浙江 · 宁波杭州湾新区</span>
+                        </div>
+                        <h3>第七届</h3>
+                        <p class="timeline-theme">主题：STEAM教育、创客教育与普通高中信息技术实验</p>
+                        <p>近600名来自全国各地的中小学STEAM教育工作者齐聚杭州湾，三天大会囊括32场学术报告与30个主题工作坊。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">6</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2018年9月</span>
+                            <span class="timeline-city">吉林 · 长春</span>
+                        </div>
+                        <h3>第六届</h3>
+                        <p class="timeline-theme">主题：STEAM教育与创客教育的新阶段</p>
+                        <p>在长春市实验中学举行，来自全国21个省市的中小学STEAM教育工作者、知名教育创客等600多人参加，同期举办长春市首届中小学创客嘉年华。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">5</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2017年8月</span>
+                            <span class="timeline-city">山东 · 蓬莱</span>
+                        </div>
+                        <h3>第五届</h3>
+                        <p class="timeline-theme">主题：STEAM教育与综合实践活动</p>
+                        <p>大会围绕主题开展Microbit与Python编程、基于电子的设计思维、RoboCom全国青少年编程及CM3创客挑战赛、MIDI音乐教育、农村创客教育与3D打印教学、Mixly课程开发与技术培训等六大分论坛。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">4</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2016年11月</span>
+                            <span class="timeline-city">广东 · 佛山</span>
+                        </div>
+                        <h3>第四届</h3>
+                        <p class="timeline-theme">聚焦：创客教育实践与课程融合</p>
+                        <p>大会在佛山市顺德区举办，设置了主题报告、学校参观、分组研讨及多个工作坊，并启动中国电子学会创客教育专家委员会"硬件漂流"活动。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2015年</span>
+                            <span class="timeline-city">上海</span>
+                        </div>
+                        <h3>第三届</h3>
+                        <p class="timeline-theme">聚焦：STEAM教育实践与创新</p>
+                        <p>大会继续推进STEAM教育在全国中小学的落地实践，促进一线教师教学经验交流。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2014年</span>
+                            <span class="timeline-city">江苏 · 常州</span>
+                        </div>
+                        <h3>第二届</h3>
+                        <p class="timeline-theme">聚焦：STEAM教育课程设计与实施</p>
+                        <p>大会进一步凝聚了早期STEAM教育实践者，推动了跨学科课程设计在全国范围的交流。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">1</div>
+                    <div class="timeline-content">
+                        <div class="timeline-meta">
+                            <span class="timeline-year">2013年8月</span>
+                            <span class="timeline-city">浙江 · 温州</span>
+                        </div>
+                        <h3>第一届</h3>
+                        <p class="timeline-theme">主题：中小学STEAM教育创新论坛</p>
+                        <p>全国第一届中小学STEAM教育研究协作组在温州中学成立，来自全国13个省市的80多位代表齐聚温州中学，共同交流探讨STEAM教育，拉开了大会的序幕。</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="footer-links">
-          <h4>导航</h4>
-          <a href="list.html">项目列表</a>
-          <a href="about.html">关于我们</a>
-          <a href="maker.html">创客教育</a>
-          <a href="ai.html">人工智能</a>
+    </section>
+
+    <section id="features" class="section features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">FEATURES</span>
+                <h2>大会特色</h2>
+                <p>十余年的坚持，让全国中小学STEAM教育大会形成了独特的办会风格与价值追求。</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <span class="feature-number">01</span>
+                    <h3>专家报告与一线经验并重</h3>
+                    <p>既有高校教授、研究机构专家的理论引领，也有一线教师、教育创客的课堂实践分享。</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-number">02</span>
+                    <h3>丰富的工作坊与动手实践</h3>
+                    <p>每届大会都设置多个主题工作坊，让参会教师在做中学、学中思，带走可直接落地的课程方案。</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-number">03</span>
+                    <h3>开源共享的社群生态</h3>
+                    <p>大会催生了"猫友汇"等教师社群，形成了课程开源、硬件漂流、众筹共创等独特的协作文化。</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-number">04</span>
+                    <h3>紧跟教育技术前沿</h3>
+                    <p>从Arduino、Scratch、3D打印到人工智能、开源硬件、生成式AI，大会始终关注技术赋能教育的新可能。</p>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="footer-bottom">
-        <p>© 虚谷计划组委会 2018 — 2026. 保留所有权利。</p>
-      </div>
-    </div>
-  </footer>
+    </section>
 
-  <script>
-    // Header scroll effect
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 20) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">S</span>
+                    <div>
+                        <strong>全国中小学STEAM教育大会</strong>
+                        <p>中国电子学会现代教育技术分会主办</p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>友情链接</h4>
+                    <div class="friend-links">
+                        <a href="https://www.vvplan.cn/" target="_blank" rel="noopener">虚谷计划</a>
+                        <a href="http://steamedu.site/" target="_blank" rel="noopener">STEAM教育大会</a>
+                        <a href="https://xedupro.cn/" target="_blank" rel="noopener">XEduPro项目</a>
+                        <a href="https://xedupro.cc/" target="_blank" rel="noopener">QuickForm项目</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 全国中小学STEAM教育大会 · <a href="https://steamedu.site">steamedu.site</a></p>
+            </div>
+        </div>
+    </footer>
 
-    // Mobile menu
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-    menuToggle.addEventListener('click', () => {
-      menuToggle.classList.toggle('active');
-      mobileMenu.classList.toggle('open');
-    });
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        menuToggle.classList.remove('active');
-        mobileMenu.classList.remove('open');
-      });
-    });
-
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
-
-    // Projects mouse-position scroll
-    const projectsWrap = document.getElementById('projectsScrollWrap');
-    const projectsTrack = document.getElementById('projectsScrollTrack');
-    if (projectsWrap && projectsTrack) {
-      const cards = Array.from(projectsTrack.children);
-      cards.forEach(card => {
-        const clone = card.cloneNode(true);
-        projectsTrack.appendChild(clone);
-      });
-
-      const maxSpeed = 6;
-      const deadzone = 0.4;
-      let targetSpeed = 0;
-      let isHovering = false;
-      let animationId = null;
-
-      function loop() {
-        if (!isHovering) {
-          animationId = null;
-          return;
-        }
-
-        const originalWidth = projectsWrap.scrollWidth / 2;
-        projectsWrap.scrollLeft += targetSpeed;
-
-        if (projectsWrap.scrollLeft >= originalWidth) {
-          projectsWrap.scrollLeft -= originalWidth;
-        } else if (projectsWrap.scrollLeft < 0) {
-          projectsWrap.scrollLeft += originalWidth;
-        }
-
-        animationId = requestAnimationFrame(loop);
-      }
-
-      function startLoop() {
-        if (!animationId) {
-          animationId = requestAnimationFrame(loop);
-        }
-      }
-
-      projectsWrap.addEventListener('mouseenter', () => {
-        isHovering = true;
-        startLoop();
-      });
-
-      projectsWrap.addEventListener('mouseleave', () => {
-        isHovering = false;
-        targetSpeed = 0;
-      });
-
-      projectsWrap.addEventListener('mousemove', (e) => {
-        const rect = projectsWrap.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const width = rect.width;
-        const centerLeft = width * (1 - deadzone) / 2;
-        const centerRight = width - centerLeft;
-
-        if (x >= centerLeft && x <= centerRight) {
-          targetSpeed = 0;
-        } else if (x < centerLeft) {
-          const ratio = (centerLeft - x) / centerLeft;
-          targetSpeed = -maxSpeed * ratio * ratio;
-        } else {
-          const ratio = (x - centerRight) / centerLeft;
-          targetSpeed = maxSpeed * ratio * ratio;
-        }
-      });
-    }
-  </script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
