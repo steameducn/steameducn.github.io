@@ -37,6 +37,44 @@ document.addEventListener('DOMContentLoaded', function() {
             navToggle.setAttribute('aria-expanded', 'false');
         }
     });
+
+    // Quick nav scroll spy on current page
+    const quickNav = document.querySelector('.quick-nav');
+    if (quickNav) {
+        const quickLinks = quickNav.querySelectorAll('.quick-nav-link');
+        const sections = Array.from(quickLinks).map(function(link) {
+            return document.querySelector(link.getAttribute('href'));
+        }).filter(Boolean);
+
+        function updateQuickNav() {
+            const scrollPos = window.scrollY + header.offsetHeight + 80;
+            let current = sections[0];
+            sections.forEach(function(section) {
+                if (section.offsetTop <= scrollPos) {
+                    current = section;
+                }
+            });
+            quickLinks.forEach(function(link) {
+                link.classList.toggle('active', link.getAttribute('href') === '#' + current.id);
+            });
+        }
+
+        window.addEventListener('scroll', updateQuickNav);
+        updateQuickNav();
+
+        quickLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - header.offsetHeight - 24,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    }
 });
 
 
