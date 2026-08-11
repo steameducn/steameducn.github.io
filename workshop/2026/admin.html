@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>参会名单导入工具</title>
+  <meta name="description" content="通用参会名单批量导入工具，支持自定义数据接口地址。">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    .import-page {
+      min-height: calc(100vh - var(--header-height));
+      padding: 4rem 0;
+      background: var(--color-bg-alt);
+    }
+
+    .import-card {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2.5rem;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+    }
+
+    .import-card h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.75rem;
+      color: #0f172a;
+    }
+
+    .import-card .intro {
+      margin: 0 0 2rem;
+      color: var(--color-text-light);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #0f172a;
+    }
+
+    .form-group .hint {
+      display: block;
+      margin-top: 0.375rem;
+      font-size: 0.875rem;
+      color: var(--color-text-light);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--color-text);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 0.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    }
+
+    textarea.form-control {
+      min-height: 12rem;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .preview-table {
+      width: 100%;
+      margin: 1.5rem 0;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+
+    .preview-table th,
+    .preview-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .preview-table th {
+      font-weight: 600;
+      color: #0f172a;
+      background: var(--color-bg-alt);
+    }
+
+    .preview-table tr.invalid td {
+      color: #dc2626;
+      background: #fef2f2;
+    }
+
+    .preview-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding: 0.875rem 1rem;
+      background: var(--color-bg-alt);
+      border-radius: 0.5rem;
+      font-size: 0.9375rem;
+    }
+
+    .status-message {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      border-radius: 0.5rem;
+      font-size: 0.9375rem;
+    }
+
+    .status-message.success {
+      color: #166534;
+      background: #dcfce7;
+      border: 1px solid #86efac;
+    }
+
+    .status-message.error {
+      color: #991b1b;
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+    }
+
+    .status-message.info {
+      color: #1e40af;
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+    }
+
+    .import-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .import-actions .btn {
+      min-width: 8rem;
+    }
+
+    .roster-area {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .roster-area h3 {
+      margin: 0 0 0.75rem;
+      font-size: 1.25rem;
+      color: #0f172a;
+    }
+
+    .roster-count {
+      margin: 0 0 1rem;
+      color: var(--color-text-light);
+      font-size: 0.9375rem;
+    }
+
+    .btn-secondary {
+      color: var(--color-text);
+      background: #fff;
+      border: 1px solid var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-bg-alt);
+    }
+
+    .example-box {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border: 1px dashed var(--color-border);
+      border-radius: 0.5rem;
+    }
+
+    .example-box code {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--color-text-light);
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a class="logo" href="index.html" aria-label="首页">
+        <span class="logo-icon">AI</span>
+        <span class="logo-text">名单导入工具</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="import-page">
+    <div class="container">
+      <div class="import-card">
+        <h2>参会名单导入</h2>
+        <p class="intro">支持单条录入或批量粘贴，系统自动解析并提交到指定的数据接口。</p>
+
+        <form id="importForm">
+          <div class="form-group">
+            <label for="apiUrl">数据接口地址</label>
+            <input type="url" id="apiUrl" class="form-control" placeholder="https://example.com/api/xxx" required>
+            <span class="hint">提交名单与查看名单将分别使用该地址及“地址/all”。修改后会自动记住。</span>
+          </div>
+
+          <div class="example-box">
+          <label>批量格式示例（每行一条，姓名与手机用逗号、空格或制表符分隔）：</label>
+          <code>张三,13800138000
+李四 13900139000
+王五  15000150000</code>
+        </div>
+
+          <div class="form-group">
+            <label for="batchInput">参会名单</label>
+            <textarea id="batchInput" class="form-control" placeholder="请粘贴参会名单，每行一条：姓名,手机" required></textarea>
+            <span class="hint">支持一次性粘贴多行，提交前可预览解析结果。</span>
+          </div>
+
+          <div id="previewArea" style="display: none;">
+            <div class="preview-status">
+              <span id="previewCount">已解析 0 条有效记录</span>
+              <span id="previewInvalid" style="color: #dc2626;"></span>
+            </div>
+            <table class="preview-table">
+              <thead>
+                <tr>
+                  <th style="width: 3rem;">序号</th>
+                  <th>姓名</th>
+                  <th>手机</th>
+                </tr>
+              </thead>
+              <tbody id="previewBody"></tbody>
+            </table>
+          </div>
+
+          <div class="import-actions">
+            <button type="button" class="btn btn-secondary" id="previewBtn">解析预览</button>
+            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>提交名单</button>
+            <button type="button" class="btn btn-secondary" id="viewRosterBtn">查看名单</button>
+          </div>
+
+          <div id="statusMessage" class="status-message" style="display: none;"></div>
+        </form>
+
+        <div id="rosterArea" class="roster-area" style="display: none;">
+          <h3>当前参会名单</h3>
+          <p id="rosterCount" class="roster-count"></p>
+          <table class="preview-table">
+            <thead>
+              <tr>
+                <th style="width: 3rem;">序号</th>
+                <th>姓名</th>
+                <th>手机</th>
+              </tr>
+            </thead>
+            <tbody id="rosterBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> 名单导入工具. 保留所有权利。</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const DEFAULT_API_URL = 'https://qf.zmrobo.com/api/x5sz720ikv';
+    const apiUrlInput = document.getElementById('apiUrl');
+    const batchInput = document.getElementById('batchInput');
+    const previewBtn = document.getElementById('previewBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const previewArea = document.getElementById('previewArea');
+    const previewBody = document.getElementById('previewBody');
+    const previewCount = document.getElementById('previewCount');
+    const previewInvalid = document.getElementById('previewInvalid');
+    const statusMessage = document.getElementById('statusMessage');
+    const importForm = document.getElementById('importForm');
+    const viewRosterBtn = document.getElementById('viewRosterBtn');
+    const rosterArea = document.getElementById('rosterArea');
+    const rosterBody = document.getElementById('rosterBody');
+    const rosterCount = document.getElementById('rosterCount');
+
+    let parsedEntries = [];
+
+    // Initialize API URL from localStorage or default
+    apiUrlInput.value = localStorage.getItem('import_api_url') || DEFAULT_API_URL;
+    apiUrlInput.addEventListener('input', () => {
+      localStorage.setItem('import_api_url', apiUrlInput.value.trim());
+    });
+
+    function getApiUrls() {
+      const baseUrl = apiUrlInput.value.trim().replace(/\/$/, '');
+      return {
+        submitUrl: baseUrl,
+        listUrl: baseUrl ? `${baseUrl}/all` : ''
+      };
+    }
+
+    function parseEntries(text) {
+      const lines = text.split(/\r?\n/);
+      const entries = [];
+      const invalid = [];
+
+      lines.forEach((line, index) => {
+        const trimmed = line.trim();
+        if (!trimmed) return;
+
+        // Split by comma, tab, or 2+ spaces
+        const parts = trimmed.split(/[,，\t]|\s{2,}/).map(s => s.trim()).filter(Boolean);
+
+        if (parts.length >= 2) {
+          const name = parts[0];
+          const phone = parts.slice(1).join('').replace(/\s+/g, '');
+          const isValidPhone = /^1[3-9]\d{9}$/.test(phone);
+
+          entries.push({
+            line: index + 1,
+            name,
+            phone,
+            valid: isValidPhone
+          });
+
+          if (!isValidPhone) {
+            invalid.push(index + 1);
+          }
+        } else {
+          invalid.push(index + 1);
+        }
+      });
+
+      return { entries, invalid };
+    }
+
+    function showStatus(type, message) {
+      statusMessage.className = `status-message ${type}`;
+      statusMessage.textContent = message;
+      statusMessage.style.display = 'block';
+    }
+
+    function hideStatus() {
+      statusMessage.style.display = 'none';
+    }
+
+    previewBtn.addEventListener('click', () => {
+      hideStatus();
+      const text = batchInput.value;
+      if (!text.trim()) {
+        showStatus('info', '请先输入或粘贴参会名单。');
+        previewArea.style.display = 'none';
+        submitBtn.disabled = true;
+        return;
+      }
+
+      const { entries, invalid } = parseEntries(text);
+      parsedEntries = entries;
+
+      previewBody.innerHTML = '';
+      entries.forEach((entry, index) => {
+        const row = document.createElement('tr');
+        if (!entry.valid) row.classList.add('invalid');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${entry.name}</td>
+          <td>${entry.phone}</td>
+        `;
+        previewBody.appendChild(row);
+      });
+
+      const validCount = entries.filter(e => e.valid).length;
+      previewCount.textContent = `已解析 ${entries.length} 条记录，有效 ${validCount} 条`;
+      previewInvalid.textContent = invalid.length > 0 ? `第 ${invalid.join('、')} 行格式或手机号有误` : '';
+      previewArea.style.display = 'block';
+
+      submitBtn.disabled = validCount === 0;
+
+      if (invalid.length > 0) {
+        showStatus('error', `发现 ${invalid.length} 行数据有误，请修正后再提交。`);
+      } else if (validCount > 0) {
+        showStatus('success', `解析成功，共 ${validCount} 条有效记录，可点击“提交名单”。`);
+      }
+    });
+
+    importForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideStatus();
+
+      if (parsedEntries.length === 0) {
+        showStatus('info', '请先点击“解析预览”确认数据。');
+        return;
+      }
+
+      const validEntries = parsedEntries.filter(e => e.valid).map(e => ({
+        name: e.name,
+        phone: e.phone.slice(-4)
+      }));
+
+      if (validEntries.length === 0) {
+        showStatus('error', '没有有效的参会记录，请检查数据格式。');
+        return;
+      }
+
+      const { submitUrl } = getApiUrls();
+      if (!submitUrl) {
+        showStatus('error', '请先填写数据接口地址。');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '提交中…';
+
+      try {
+        const response = await fetch(submitUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ entries: validEntries })
+        });
+
+        if (response.ok) {
+          const result = await response.json().catch(() => ({}));
+          showStatus('success', `提交成功！共 ${validEntries.length} 条记录。${result.message || ''}`);
+          batchInput.value = '';
+          previewArea.style.display = 'none';
+          parsedEntries = [];
+        } else {
+          const errorText = await response.text().catch(() => '服务器错误');
+          showStatus('error', `提交失败（${response.status}）：${errorText}`);
+        }
+      } catch (err) {
+        showStatus('error', `提交出错：${err.message}`);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '提交名单';
+      }
+    });
+
+    viewRosterBtn.addEventListener('click', async () => {
+      const { listUrl } = getApiUrls();
+      if (!listUrl) {
+        showStatus('error', '请先填写数据接口地址。');
+        return;
+      }
+
+      viewRosterBtn.disabled = true;
+      viewRosterBtn.textContent = '加载中…';
+      hideStatus();
+
+      try {
+        const response = await fetch(listUrl, { method: 'GET' });
+        if (!response.ok) {
+          throw new Error(`服务器返回 ${response.status}`);
+        }
+        const data = await response.json();
+
+        // The endpoint groups entries under submissions
+        const submissions = Array.isArray(data)
+          ? data
+          : (Array.isArray(data.submissions) ? data.submissions : []);
+        const entries = submissions.flatMap(item =>
+          Array.isArray(item.entries) ? item.entries : [item]
+        ).filter(e => e && (e.name || e.phone));
+
+        rosterBody.innerHTML = '';
+        entries.forEach((entry, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${entry.name || '-'}</td>
+            <td>${entry.phone || '-'}</td>
+          `;
+          rosterBody.appendChild(row);
+        });
+
+        rosterCount.textContent = `共 ${entries.length} 条记录`;
+        rosterArea.style.display = 'block';
+        rosterArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        showStatus('error', `名单加载失败：${err.message}`);
+      } finally {
+        viewRosterBtn.disabled = false;
+        viewRosterBtn.textContent = '查看名单';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第十四届STEAM教育大会工作坊报名</title>
+  <meta name="description" content="第十四届STEAM教育大会工作坊报名，支持三场工作坊选课、身份验证与在线提交。">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    .workshop-page {
+      min-height: calc(100vh - var(--header-height));
+      padding: 4rem 0;
+      background: var(--color-bg-alt);
+    }
+
+    .workshop-hero {
+      background: linear-gradient(135deg, #240b36 0%, #b5179e 35%, #1a0b2e 70%, #0f0c29 100%);
+      color: #fff;
+    }
+
+    .workshop-hero .hero-decoration {
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255, 78, 205, 0.25) 0%, transparent 35%),
+        radial-gradient(circle at 85% 85%, rgba(67, 97, 238, 0.2) 0%, transparent 35%),
+        repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 30px);
+    }
+
+    .workshop-hero h1,
+    .workshop-hero .hero-subtitle {
+      color: #fff;
+    }
+
+    .workshop-hero .hero-label {
+      color: #ffd6f5;
+      background: rgba(255, 78, 205, 0.18);
+      border: 1px solid rgba(255, 78, 205, 0.4);
+    }
+
+    .workshop-hero .hero-content {
+      margin: 0 auto;
+      text-align: center;
+      max-width: 1100px;
+    }
+
+    .workshop-hero h1 {
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .workshop-hero h1 {
+        white-space: nowrap;
+      }
+    }
+
+    .workshop-hero .hero-subtitle {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 720px;
+    }
+
+    .intro-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .intro-card {
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius);
+    }
+
+    .intro-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+      color: #ff4ecd;
+    }
+
+    .intro-card p {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: #f3e8ff;
+    }
+
+    .session-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .session-tab {
+      padding: 0.875rem 2rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--color-text);
+      background: #fff;
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .session-tab:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .session-tab.active {
+      color: #fff;
+      background: linear-gradient(135deg, #ff4ecd, #b5179e);
+      border-color: transparent;
+      box-shadow: 0 4px 14px rgba(255, 78, 205, 0.35);
+    }
+
+    .workshop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .workshop-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .workshop-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .workshop-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      background: #fff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .workshop-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .workshop-card.selected {
+      border-color: #ff4ecd;
+      box-shadow: 0 0 0 3px rgba(255, 78, 205, 0.12);
+    }
+
+    .workshop-card.disabled {
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .workshop-header {
+      margin-bottom: 1rem;
+    }
+
+    .workshop-number {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      padding: 0.25rem 0.625rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      border-radius: 0.25rem;
+    }
+
+    .workshop-name {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #0f172a;
+      cursor: pointer;
+      line-height: 1.4;
+    }
+
+    .workshop-name:hover {
+      color: var(--color-primary);
+    }
+
+    .workshop-meta {
+      flex: 1;
+      margin-bottom: 1.25rem;
+    }
+
+    .workshop-meta p {
+      margin: 0 0 0.5rem;
+      font-size: 0.9375rem;
+      color: var(--color-text-light);
+    }
+
+    .workshop-meta strong {
+      color: var(--color-text);
+    }
+
+    .workshop-progress {
+      margin-bottom: 1.25rem;
+    }
+
+    .progress-bar {
+      height: 0.5rem;
+      background: var(--color-bg-alt);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff4ecd, #b5179e);
+      border-radius: 999px;
+      transition: width 0.3s;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.375rem;
+      font-size: 0.8125rem;
+      color: var(--color-text-light);
+    }
+
+    .workshop-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-sm {
+      flex: 1;
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    .difficulty-badge {
+      display: inline-block;
+      padding: 0.25rem 0.625rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 0.25rem;
+    }
+
+    .difficulty-beginner {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .difficulty-advanced {
+      color: #7c2d12;
+      background: #ffedd5;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 920px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #0f172a;
+    }
+
+    .modal-close {
+      width: 2.25rem;
+      height: 2.25rem;
+      font-size: 1.75rem;
+      color: var(--color-text-light);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-body p {
+      margin: 0 0 0.75rem;
+      color: var(--color-text-light);
+    }
+
+    .modal-body .detail-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.625rem;
+    }
+
+    .modal-body .detail-label {
+      flex-shrink: 0;
+      width: 5rem;
+      font-weight: 500;
+      color: #0f172a;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem 1.5rem;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 1.75rem;
+    }
+
+    @media (max-width: 720px) {
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .speaker-card {
+      text-align: center;
+    }
+
+    .speaker-photo {
+      width: 100%;
+      max-width: 220px;
+      aspect-ratio: 1 / 1;
+      margin: 0 auto 1rem;
+      object-fit: cover;
+      border-radius: 50%;
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+    }
+
+    .speaker-photo.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-light);
+      font-size: 0.875rem;
+    }
+
+    .speaker-photos {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .speaker-photos .speaker-photo {
+      max-width: 100%;
+      margin: 0;
+    }
+
+    .speaker-photos.single .speaker-photo {
+      grid-column: span 2;
+      max-width: 220px;
+      margin: 0 auto;
+    }
+
+    .speaker-name {
+      margin: 0 0 0.5rem;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .speaker-info {
+      font-size: 0.9375rem;
+      color: var(--color-text-light);
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .workshop-description {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .workshop-description h4 {
+      margin: 0 0 0.75rem;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+
+    .workshop-description p {
+      margin: 0;
+      line-height: 1.7;
+      color: var(--color-text);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.375rem;
+      font-weight: 500;
+      color: #0f172a;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      border: 1px solid var(--color-border);
+      border-radius: 0.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    }
+
+    .status-message {
+      margin-top: 1rem;
+      padding: 0.875rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.9375rem;
+    }
+
+    .status-message.success {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .status-message.error {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .status-message.info {
+      color: #1e40af;
+      background: #dbeafe;
+    }
+
+    .summary-panel {
+      position: sticky;
+      bottom: 1.5rem;
+      max-width: 720px;
+      margin: 2rem auto 0;
+      padding: 1.25rem 1.5rem;
+      background: #fff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .summary-panel h4 {
+      margin: 0 0 0.75rem;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+
+    .summary-list {
+      margin: 0 0 1rem;
+      padding: 0;
+      list-style: none;
+    }
+
+    .summary-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.625rem 0;
+      font-size: 0.9375rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .summary-list li strong {
+      flex: 1;
+      min-width: 0;
+      font-weight: 500;
+    }
+
+    .summary-list li .btn-sm {
+      flex: 0 0 auto;
+    }
+
+    .summary-list li:last-child {
+      border-bottom: none;
+    }
+
+    .summary-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--color-text-light);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--color-text-light);
+    }
+
+    @media (max-width: 640px) {
+      .session-tab {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9375rem;
+      }
+
+      .modal {
+        max-height: 95vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../../index.html" class="logo">
+        <img src="../../images/logo_s.jpg" alt="全国中小学STEAM教育大会" class="logo-img">
+        <span class="logo-text">STEAM教育大会</span>
+      </a>
+      <nav class="main-nav">
+        <button class="nav-toggle" aria-label="打开菜单" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <ul class="nav-list">
+          <li><a href="../../current.html">返回大会主页面</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero workshop-hero">
+      <div class="container">
+        <div class="hero-content">
+          <p class="hero-label">2026 年 8 月 19 日 · 太原师范学院</p>
+          <h1>第十四届STEAM教育大会<br>工作坊报名</h1>
+          <p class="hero-subtitle">
+            本次大会设置 24 个专题工作坊，分三个场次进行。每位参会者每场只能选择一个工作坊，
+            请根据自身兴趣与时间安排合理选课。
+          </p>
+          <div class="intro-cards">
+            <div class="intro-card">
+              <h3>第一场</h3>
+              <p>09:00—10:30<br>共 11 个工作坊可选</p>
+            </div>
+            <div class="intro-card">
+              <h3>第二场</h3>
+              <p>10:45—12:15<br>共 11 个工作坊可选</p>
+            </div>
+            <div class="intro-card">
+              <h3>第三场</h3>
+              <p>13:30—15:00<br>共 10 个工作坊可选</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-decoration" aria-hidden="true"></div>
+    </section>
+
+    <section class="workshop-page">
+      <div class="container">
+                <div class="session-tabs">
+          <button class="session-tab active" data-session="1">第一场（09:00—10:30）</button>
+          <button class="session-tab" data-session="2">第二场（10:45—12:15）</button>
+          <button class="session-tab" data-session="3">第三场（13:30—15:00）</button>
+        </div>
+
+        <div id="workshopContainer" class="workshop-grid">
+          <div class="loading">正在加载工作坊数据…</div>
+        </div>
+
+        <div id="summaryPanel" class="summary-panel" style="display: none;">
+          <h4>已选工作坊</h4>
+          <ul id="summaryList" class="summary-list"></ul>
+          <div id="summaryStatus" class="status-message" style="display: none; margin-top: 1rem;"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> 全国中小学STEAM教育大会 · <a href="https://steamedu.site">steamedu.site</a></p>
+    </div>
+  </footer>
+
+  <!-- Workshop Detail Modal -->
+  <div class="modal-overlay" id="detailModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+      <div class="modal-header">
+        <h3 id="detailModalTitle">工作坊详情</h3>
+        <button class="modal-close" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body" id="detailModalBody">
+        <p>加载中…</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" data-close-modal>关闭</button>
+        <button class="btn btn-primary btn-sm" id="detailSelectBtn">选择该工作坊</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Identity Verification Modal -->
+  <div class="modal-overlay" id="verifyModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="verifyModalTitle">
+      <div class="modal-header">
+        <h3 id="verifyModalTitle">身份验证</h3>
+        <button class="modal-close" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="verifyModalHint">请填写报名信息，系统将核验您是否在参会名单中。</p>
+        <form id="verifyForm">
+          <div class="form-group">
+            <label for="userName">姓名</label>
+            <input type="text" id="userName" class="form-control" placeholder="请输入姓名" required>
+          </div>
+          <div class="form-group">
+            <label for="userPhone">手机（后 4 位）</label>
+            <input type="tel" id="userPhone" class="form-control" placeholder="请输入手机后 4 位" maxlength="11" required>
+            <span class="hint">为便于核验，请输入报名手机号的最后 4 位。</span>
+          </div>
+          <div id="verifyStatus" class="status-message" style="display: none;"></div>
+          <div class="modal-footer" style="padding: 1rem 0 0;">
+            <button type="button" class="btn btn-secondary btn-sm" data-close-modal>取消</button>
+            <button type="submit" class="btn btn-primary btn-sm">验证并提交</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Embedded workshop data from conference handbook
+    // Embedded workshop data from conference handbook
+    const WORKSHOPS = [
+      {
+            "id": 1,
+            "name": "QuickForm+AI编程零基础入门",
+            "target": "基础教育",
+            "speaker": "陈恩慈",
+            "location": "304",
+            "time": "9:00-10:30、13:30-15:00",
+            "sessions": [1,3],
+            "capacity": 30,
+            "difficulty": "入门",
+            "description": "【工作坊简介】\nQuickForm是一个由温州科技高级中学和温州大学联合开发的轻量级数据服务，专门为大模型生成的交互网页而设计，嵌入专用地址后即可实现数据收集、分析与报告生成，专注于提供智能的数据分析和可视化功能。QuickForm发布后很快得到数万一线老师的欢迎，设计出各种创意应用。本工作坊介绍如何借助AI大模型，以自然语言编程的方式开发交互网页，并实现数据存储、读取，生成大屏数据看板、智能分析等。\n\n【预期产出】\n借助QuickForm完成一到两个教学相关的交互式网页案例的闭环设计。\n\n【参与者要求】\n自带笔记本电脑，预装谷歌浏览器（推荐）",
+            "speakerInfo": "温州科技高级中学科创中心团队成员，温州科技高级中学科创导师，QuickForm教师版负责人，中国儿童中心人工智能课题负责人，多次指导学生在省市级比赛中获奖。",
+            "speakerPhoto": "speakers/workshop_1_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_1_speaker1.jpeg"]
+      },
+      {
+            "id": 2,
+            "name": "QuickForm在科技教育中的创意应用",
+            "target": "基础教育",
+            "speaker": "谢作如",
+            "location": "308",
+            "time": "10:45-12:15",
+            "sessions": [2],
+            "capacity": 30,
+            "difficulty": "入门",
+            "description": "【工作坊简介】\nQuickForm数据服务结合AI大模型，不需要编程基础就能开发各种交互网页，支持科技教育的实施。本工作坊精选了QuickForm在线版的各种精品项目，展示QuickForm在科技教育中各种创意应用，如科学数据汇聚、定时实验观测、多模态数据采集等。主持人不仅手把手展示一个最简交互网页的制作流程，还将介绍QFlink服务的使用，并展示如何在本地借助龙虾类工具配置环境，二次开发。\n\n【预期产出】\n借助大模型或者通用智能体，基于QuickForm数据服务实现个性化的创意应用。\n\n【参与者要求】\n自带电脑、提前安装workbuddy、QClaw和Trae等工具",
+            "speakerInfo": "温州科技高级中学AI科创中心主任，正高级教师，浙江省特级教师，中国青少年科技教育工作者协会AI普及教育专业委员会副主任委员，中国STEM教育2029创新行动计划专家库成员，XEduPro、QuickForm等开源项目发起人，清华大学出版社人工智能通识教材执行主编。",
+            "speakerPhoto": "speakers/workshop_2_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_2_speaker1.jpeg"]
+      },
+      {
+            "id": 3,
+            "name": "基于 XEdu Client 的 AI 实验设计与教学应用",
+            "target": "基础教育",
+            "speaker": "王海涛，孙蒙恩",
+            "location": "309",
+            "time": "10:45-12:15",
+            "sessions": [2],
+            "capacity": 20,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\nXEdu Client 面向人工智能日常课堂中的真实需求，帮助教师解决实验环境搭建繁、教学资源组织散、学生动手参与弱、AI 案例难迁移等问题，让 AI 课程从“演示型教学”走向“体验式、任务式、实践型教学”。本工作坊将结合“人体姿态控制开源硬件”主题案例，带领教师体验如何借助 XEdu Client 组织资源、开展实验、创建课程并分享课程，使 AI 教学更容易在日常课堂中落地。\n\n【预期产出】\n完成一次“人体姿态控制开源硬件”AI 实验体验，并基于 XEdu Client 创建和分享一门可用于日常教学的课程。\n\n【参与者要求】\n自带电脑，XEdu Client 教师快速上手根据文档提前安装与熟悉 XEdu Client",
+            "speakerInfo": "王海涛，上海科技大学附属学校教师，XEduPro项目核心成员，XEdu Client 项目发起人，清华大学《人工智能通识》教材八年级分册主编。主持编写中国科协青少中心发布的《全国青少年人工智能创新实践案例指南》，曾任浦江国家实验室教育研究员，商汤科技高级项目经理。长期从事人工智能课程设计、教学实践与项目推广工作。\n孙蒙恩，上海科技大学附属学校教师，从事科学、创客类课程开发与教学实践。",
+            "speakerPhoto": "speakers/workshop_3_speaker1.png",
+            "speakerPhotos": ["speakers/workshop_3_speaker1.png"]
+      },
+      {
+            "id": 4,
+            "name": "AI通识教育之智能互动装置设计",
+            "target": "基础教育",
+            "speaker": "孙耀龙",
+            "location": "302",
+            "time": "9:00-10:30、13:30-15:00",
+            "sessions": [1,3],
+            "capacity": 30,
+            "difficulty": "入门",
+            "description": "【工作坊简介】\n人工智能互动展品系列是一个由多个独立人工智能互动展品模块组成的智能互动装置，每个人工智能互动展品都集成了不同的传感器（如距离、触摸、声音、光线等）和输出元件（如LED灯带、舵机、扬声器、显示屏等）。本工作坊将带领参与者零代码训练一个属于自己的AI分类模型，并将其部署到人工智能互动展品硬件上，让每个人工智能互动展品“听懂”特定指令并做出专属反应。\n\n【预期产出】\n零代码完成一个AI分类模型的训练与部署，将模型部署到人工智能互动展品硬件上，实现“触发→识别→反馈”的完整互动。\n\n【参与者要求】\n自带笔记本电脑",
+            "speakerInfo": "电子信息专家，太原市人工智能行业协会科普专业委员会副主任。",
+            "speakerPhoto": "speakers/workshop_4_speaker1.png",
+            "speakerPhotos": ["speakers/workshop_4_speaker1.png"]
+      },
+      {
+            "id": 5,
+            "name": "AI通识教育之灵芯派智能控制器应用",
+            "target": "基础教育",
+            "speaker": "刘国",
+            "location": "307",
+            "time": "9:00-10:30、13:30-15:00",
+            "sessions": [1,3],
+            "capacity": 30,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n灵芯派是专为中小学人工智能教育设计的智能控制器，搭载1.0TOPS AI算力NPU，集成4寸触摸屏、麦克风、扬声器及6路传感器/6路电机接口，兼容中鸣机器人全生态传感器与执行器。本工作坊将以灵芯派为核心平台，带领参与者经历的完整AI硬件开发流程。让参与者在2小时内掌握灵芯派从开机到AI应用落地的全流程操作，最终完成一个\"语音指令→大模型理解→硬件响应\"的具身智能互动项目。\n\n【预期产出】\n学会调用smartpi库实现视觉识别（手势/人脸/目标/姿态/二维码）、语音交互（ASR+TTS）、模型推理（ONNX/RKNN）及联网大模型（DeepSeek-V3）等AI能力，完成1-2个可带走的课堂级AI互动项目。\n\n【参与者要求】\n自带笔记本电脑",
+            "speakerInfo": "太原市尖草坪区中小学信息技术工作室主持人、太原市高中信息技术兼职教研员、太原市高中信息技术学科带头人、太原市教育技术类名师工作室导师、山西省高中信息技术教学评价专家组成员、中国电子学会人工智能专家组成员。",
+            "speakerPhoto": "speakers/workshop_5_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_5_speaker1.jpeg"]
+      },
+      {
+            "id": 6,
+            "name": "信息科技一体化教学套件“启智板”应用",
+            "target": "基础教育",
+            "speaker": "张杰峰",
+            "location": "310",
+            "time": "9:00-10:30、13:30-15:00",
+            "sessions": [1,3],
+            "capacity": 30,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n本工作坊依托专为小学、初中信息科技课程研发的“启智板”信息科技一体化教学套件，旨在帮助参与者深入理解物联网与人工智能的硬件底层逻辑。套件以高性能ESP32-S3处理器为核心，集成了Wi-Fi/蓝牙通信、多种传感器（彩灯、按键、光敏、声音、图像识别等）及执行器，构建了“硬件实操-软件编程-虚实融合”的三位一体教学体系。参与者将利用图形化或Python编程平台，调用启智板内置的丰富接口，从零搭建一个具备环境感知能力的智能终端。\n\n【预期产出】\n设计并实现一个具备远程监控或自动化控制功能的智能装置。\n\n【参与者要求】\n自带笔记本电脑",
+            "speakerInfo": "太原市刘瑞军名师工作室导师，山西省中考命题组核心成员，山西省教学能手，太原市学科带头人，“国培计划”优秀辅导员。",
+            "speakerPhoto": "speakers/workshop_6_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_6_speaker1.jpeg"]
+      },
+      {
+            "id": 7,
+            "name": "QuickForm在微信小程序氛围编程创意应用",
+            "target": "基础教育",
+            "speaker": "邱奕盛",
+            "location": "401",
+            "time": "9:00-10:30",
+            "sessions": [1],
+            "capacity": 30,
+            "difficulty": "入门",
+            "description": "【工作坊简介】\n微信小程序作为国内日活用户数量领先的程序平台，非常适合作为学生氛围编程的练手项目。“微信小程序教育平台”完全公益、免费，致力于促进青少年科技创新培养。本工作坊为老师准备了“微信小程序教育平台”教师版体验账号，老师可以借助免费不限量的氛围编程助手，快速实现可以分发的小程序开发。再结合QuickForm，可以便捷地搭建小程序后台服务，实现前后段敏捷开发。\n\n【预期产出】\n每位参与者完成QuickForm的注册，并完成1-2个微信小程序的敏捷开发，最后得到小程序码。\n\n【参与者要求】\n携带手机和电脑，预装谷歌浏览器，可以提前注册QuickForm（https://quickform.cn/ ）。",
+            "speakerInfo": "上海科技大学附属学校教师，开设信息科技、人工智能、APCSP等课程。主导完成XEduPro算力国产化迁移工作。曾任上海人工智能实验室研究员，负责开源系列工具XEdu等智能教育工具和课程研发，2023年度创客教育创新人物，参与《基于AI全链路项目的高中生人工智能素养培养策略研究》《一体化开源儿童人工智能教学平台的开发研究》等课题研究，参与编写清华大学出版社《信息科技》、《人工智能通识》等教材。",
+            "speakerPhoto": "speakers/workshop_7_speaker1.png",
+            "speakerPhotos": ["speakers/workshop_7_speaker1.png"]
+      },
+      {
+            "id": 8,
+            "name": "WorkBuddy赋能AI教学创意应用",
+            "target": "基础教育",
+            "speaker": "曹辰阳",
+            "location": "404",
+            "time": "10:45-12:15",
+            "sessions": [2],
+            "capacity": 30,
+            "difficulty": "入门",
+            "description": "【工作坊简介】\nAI工具正深度改变教师备课教研与课堂实践。WorkBuddy是面向教学场景的AI智能工作台，可辅助教师快速生成教案、交互课件、课题小工具等教学资源。本工作坊提供实操体验环境，教师依托WorkBuddy无需复杂编程，即可快速产出可用的教学素材与课堂小应用，助力日常备课、课堂教学、课题研究落地实践。\n\n【预期产出】\n每位参与者完成WorkBuddy实操体验，借助WorkBuddy完成2‑3份教学成果，可产出教案、交互课件或课堂课题小工具成品。\n\n【参与者要求】\n携带手机和电脑，预装谷歌浏览器和workbuddy软件，需要提前注册登录workbuddy",
+            "speakerInfo": "中国教育技术协会数字化环境专委会高级教员，AI+教育领域资深专家。深耕教育数智化多年，主导多款AI教学产品规划与迭代，带领团队攻克教学场景智能化核心难题，推动技术与课堂、实训深度融合，以数智手段赋能教育提质增效。",
+            "speakerPhoto": "speakers/workshop_8_speaker1.png",
+            "speakerPhotos": ["speakers/workshop_8_speaker1.png"]
+      },
+      {
+            "id": 9,
+            "name": "QuickClass赋能教学研一体化",
+            "target": "基础教育",
+            "speaker": "耿秋萍",
+            "location": "313",
+            "time": "10:45-12:15",
+            "sessions": [2],
+            "capacity": 30,
+            "difficulty": "入门",
+            "description": "【工作坊简介】\nQuickClass是一个面向课堂的AI智能体教学平台，不需技术背景就能搭建AI驱动的互动课堂。本工作坊精选了QuickClass的典型课例项目，展示其在跨学科中的创意应用。将演示如何本地部署与配置，，并手把手指导完成一个完整课例的搭建全流程，还将介绍如何基于课堂数据一键生成学情报告与教研论文初稿，并演示满足个性化教研需求。\n\n【预期产出】\n完成QuickClass的本地部署与配置，借助QuickClass完成一个完整的AI互动课例搭建，可产出可直接运行的AI课堂活动、一份多维学情分析报告以及一篇自动生成的教研论文初稿\n\n【参与者要求】\n自带笔记本电脑",
+            "speakerInfo": "江阴市山观高级中学教师，无锡市学科带头人，江苏省人工智能领航教师。曾获江苏省基本功一等奖、无锡市优质课一等奖、无锡市教师技能大赛一等奖。主持江苏省重点规划课题《发生学视角下高中人工智能课程项目化教学的实践研究》，并核心参与国家社科基金课题与多项省市规划课题研究。",
+            "speakerPhoto": "speakers/workshop_9_speaker1.png",
+            "speakerPhotos": ["speakers/workshop_9_speaker1.png"]
+      },
+      {
+            "id": 10,
+            "name": "DeepSeek技术助力科学实践课设计",
+            "target": "基础教育",
+            "speaker": "何国柱",
+            "location": "405",
+            "time": "10:45-12:15",
+            "sessions": [2],
+            "capacity": 20,
+            "difficulty": "入门",
+            "description": "【工作坊简介】\n深圳市“每周半天计划”：以万物为教材，把世界做课堂，从2024年秋季学期，启动“每周半天计划”。其中科学实践课程的开发是一大版块，利用DeepSeek等技术助力科学实践课的开发与设计，让技术成为连接知识与现实的桥梁，引导学生在真实情境中探索科学奥秘。本课程旨在打破传统课堂边界，通过技术赋能与实地探究的深度融合，让学生在“做中学”里重塑科学思维，真正实现对自然规律的深度理解与创新应用。这不仅是教学方式的革新，更是教育回归本质的尝试：让知识在触摸中变得温热，让思维在行走中生出根系。\n\n【预期产出】\n将沉淀半天（3课时）可复制的“技术+实地”科学实践课程体系，包含完整的教案库、学生探究手册及教师指导指南。\n\n【参与者要求】\n需具备基础科学探究兴趣，对Al工具有一定操作能力，并拥有良好的团队协作精神与户外实践安全意识。",
+            "speakerInfo": "深圳市格致中学化学教师，高级教师，广东教育学会家校社协同育人专业委员会理事。山西师范大学教育（学科教学化学）专业学位硕士研究生行业导师。参与编写论著4部，专著1部，公开发表论文2篇，获得省教学成果奖二等奖，主持省规划课题1项（已结题），主持深圳市“每周半天计划”一项（已结项），参与深圳市每周半天计划一项（已结项），在跨学科项目式学习与科学实践课程开发方面拥有丰富的理论与实践经验。",
+            "speakerPhoto": "speakers/workshop_10_speaker1.png",
+            "speakerPhotos": ["speakers/workshop_10_speaker1.png"]
+      },
+      {
+            "id": 11,
+            "name": "通用智能在文科教学中的落地实践",
+            "target": "基础教育",
+            "speaker": "刘希，谢贤晓",
+            "location": "301",
+            "time": "9:00-10:30、13:30-15:00",
+            "sessions": [1,3],
+            "capacity": 30,
+            "difficulty": "入门",
+            "description": "【工作坊简介】\n文科教师面对大量结构相似的重复工作——备课资源、课堂互动工具、数据整理、材料归档，每次都从头来过。本工作坊从一位小学语文教师的真实实践出发，展示如何利用桌面智能体workbuddy将教学流程封装为可复用的Skill技能包，覆盖文档生成与HTML交互网页制作。参与者无需编程基础，将经历\"跑通场景→封装Skill→反复调用\"的完整过程，最终每人产出一个适配自身教学需求的Skill，工作坊结束即可用于日常。\n\n【预期产出】\n每位参与者独立完成一个WorkBuddySkill技能包的设计与开发\n\n【参与者要求】\n携带手机和电脑，预装workbuddy软件，需要提前注册登录workbuddy",
+            "speakerInfo": "谢贤晓，平阳县教师发展中心副主任，小学信息科技、创客研训员，中国电子学会现代教育技术分会创客教育专家组成员，2023年度全国创客教育创新人物提名奖。清华大学出版社《信息科技》、《人工智能通识》教材小学段副主编。\n刘希，跨界教育践行者，AI语文教学先行者。杭州市竞舟小学语文高级教师，持有中国电子学会AI智能体应用开发工程师及中科院心理所心理咨询师双项认证，深耕AI技术应用与儿童心理成长。曾获杭州市教育改革创新\"十大年度班主任\"、浙江省优秀班集体班主任、全国创新杯竞赛优秀指导师；论文多次获省一等奖，发表于《小学语文教师》等核心期刊。参于编写《课文里的写作密码》《绘本里的写作密码》《小学生快乐阅读三合一》等书籍，即将出版书籍《AI语文学习法》。",
+            "speakerPhoto": "speakers/workshop_11_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_11_speaker1.jpeg","speakers/workshop_11_speaker2.jpeg"]
+      },
+      {
+            "id": 12,
+            "name": "设计AI龙舟机器人",
+            "target": "基础教育",
+            "speaker": "龙丽嫦、高伟光",
+            "location": "306",
+            "time": "9:00-10:30",
+            "sessions": [1],
+            "capacity": 20,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n本工作坊以中国传统龙舟文化为载体，融合人工智能技术，带领教师体验完整的STEAM项目式学习流程。参与者将亲手完成AI龙舟机器人的工程搭建、MIND+图形化编程开发，以及AI视觉等前沿技术的实际接入与应用。主要是通过机器人结构件完成龙舟模型的机械装配，理解传动等结构设计原理。基于Arduino硬件平台，使用MIND+图形化编程环境实现龙舟机器人的运动控制、传感器反馈与交互逻辑。引入AI模块，让机器人具备\"智能判断\"能力，体验人工智能在教育场景中的落地实践。\n\n【预期产出】\n帮助教师掌握一套完整的AI+机器人教学案例，能够在返校后独立开展类似课程。\n\n【参与者要求】\n自带有摄像头的笔记本电脑，预装Mind+1.81RC3.0",
+            "speakerInfo": "龙丽嫦，广东省特级教师,广州市电化教育馆教研员，红棉创客空间创始人、负责人。华南师范大学教师教育学部兼职教授、教育信息术学院校外硕士生导师。广州市龙丽教育专家工作室主持人(2025-2027年)。广东省科技教育名师工作室主持人(2023-2027年)，广州市第三批名教师(2013年)。中国电子学会现代教育技术分会创客教育专家委员。曾任多年全国中小学创客项目评委专家组组长、全国人工智能示范区校)培育项目师资培训组组长。全国普通高中信息技术教材(粤教版)选择性必修6《开源硬件项目设计》主编。主持多个国家级、省市级科创课题，在《电化教育研究》等核心期刊、其他各级学术期刊公开发表论文30多篇，出版著作3本，参与制作课程被认定为国家级、省级一流本科课程，作为主持人获广东省基础教育教学成果奖一等奖2项。将红棉创客空间打造为广州市、广东省首批优秀教育创客空间，培育红棉创客教育导师团队为省级实践共同体重点项目成员,多位成员成长为省、市科技教育名教师、名师工作室主持人。获2023年全国十大创客年度人物称号。\n高伟光，广州市白云中学信息技术教师、科创中心负责人，广州市白云区科创/STEAM教育应用联盟基地负责人。现任广东省科技教育名师工作室主持人，广州市电化教育馆红棉创客空间创客导师。获评南粤优秀教师、广东省科普讲师团成员、广州市优秀科普工作者、广州市十佳科技辅导员、广东省教学成果一等奖。2019—2026年担任原电脑制作活动广东省省赛创意智造项目负责人及评委。近年来指导学生参加各级竞赛获区级以上荣誉277项（次）、市级120项（次）、省级以上36项（次）、国家级5项（次），其中全国一等奖2项（次）。多次担任App Invento r培训、创客专项培训、激光切割技术师资培训主讲导师。参与编著《激光切割与LaserMaker建模》《App Inventor与开源硬件创意编程》《超有趣的少儿STEAM学习项目》《App Inventor创意趣味编程进阶》等著作；全国普通高中信息技术教材（粤教版）选择性必修6《开源硬件项目设计》核心作者。",
+            "speakerPhoto": "speakers/workshop_12_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_12_speaker1.jpeg","speakers/workshop_12_speaker2.jpeg"]
+      },
+      {
+            "id": 13,
+            "name": "基于A2M的中小学具身智能项目式学习",
+            "target": "基础教育",
+            "speaker": "王昌强",
+            "location": "313",
+            "time": "9:00-10:30、13:30-15:00",
+            "sessions": [1,3],
+            "capacity": 30,
+            "difficulty": "入门",
+            "description": "【工作坊简介】\n面向中小学科技教师、信息科技教师及STEAM教育工作者，以一个可现场完成的智能装置为载体，带领参与者使用A2M平台经历“创意构思—任务生成—AI编程—硬件接线—运行测试—原理理解—作品改进—成果展示”的完整过程。工作坊突出AI与开源硬件的深度融合，强调AI不是代替学生思考，而是帮助学生降低编程门槛，在真实作品中学习传感器、控制逻辑与工程调试，探索可复制、可评价、可持续实施的中小学人工智能项目式教学模式。\n\n【预期产出】\n借助A2M平台完成简易嵌入式开发作品\n\n【参与者要求】\n自带笔记本电脑",
+            "speakerInfo": "中国儿童中心科技教育教师，长期从事青少年科技教育、编程教育、创客教育及开源硬件项目教学，聚焦人工智能赋能科学教育与项目式学习实践。现开展“基于AI编程工具的开源硬件项目式课程设计与实施研究”，参与A2M平台研发与课程实践，注重将真实问题、工程设计、作品迭代和过程性评价融入课堂，在科技课程研发、学生创新作品指导及科技竞赛辅导等方面具有丰富的一线经验。",
+            "speakerPhoto": "speakers/workshop_13_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_13_speaker1.jpeg"]
+      },
+      {
+            "id": 14,
+            "name": "基于龙虾类工具的智能家居案例设计",
+            "target": "基础教育",
+            "speaker": "郑祥",
+            "location": "302",
+            "time": "10:45-12:15",
+            "sessions": [2],
+            "capacity": 30,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n语音控灯、智能调速、自动感应，这些常见的智能家居功能究竟如何实现？本工作坊以掌控板为硬件基础，结合本地类龙虾工具与SIoT物联网平台的安装部署与实操使用，通过几个典型的智能家居案例分享，带领学员从零基础实现有趣的智能家居互动案例。\n\n【预期产出】\n每位参与者将掌握用本地类龙虾工具实现个性化的智能家居互动作品。\n\n【参与者要求】\n自带笔记本电脑",
+            "speakerInfo": "2016年《全国校长信息化领导能力高级研修班暨全国创客教育骨干团队专题研修班》培训指导师，浙江省名师工作室学科带头人，青少年AI开源课程众筹计划行动负责人之一。全国中小学机器人教学展评活动机器人教学基本功竞赛一等奖，专著《跟我学App Inventor2》在清华大学出版社出版，课程《人工智能入门》入选浙江省级课程，多篇文章在国家级刊物《中国信息技术教育》发表，清华大学出版社《信息科技八年级》、《人工智能七年级》通识教材核心编委。",
+            "speakerPhoto": "speakers/workshop_14_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_14_speaker1.jpeg"]
+      },
+      {
+            "id": 15,
+            "name": "当掌控板遇上QuickForm——小板子玩转大屏幕",
+            "target": "基础教育",
+            "speaker": "刘正云",
+            "location": "306",
+            "time": "10:45-12:15",
+            "sessions": [2],
+            "capacity": 30,
+            "difficulty": "入门",
+            "description": "【工作坊简介】\n课堂互动还靠举手抢答？想搞个弹幕墙让全班参与又怕编程太难？想做体感游戏激发课堂氛围却不知道从哪下手？这些创意，掌控板与QuickForm就能帮你实现。掌控板是一块巴掌大的智能硬件，按键、加速度计、声音、光线传感器、Wi-Fi一应俱全；QuickForm是专为AI交互网页设计的轻量级数据服务，一行地址嵌入即可实现数据汇聚、实时大屏与智能分析。当两者相遇，一块小板子就变成了通往云端大屏的\"遥控器\"——你手里做什么，大屏上就变什么。本次工作坊将带老师们用掌控板做互动终端、QuickForm做数据大屏，从按键交互到传感器感知再到多终端协同，逐步搭出多个难度递进的创意互动项目。\n\n【预期产出】\n每位参与者完成掌控板与QuickForm的联调，独立搭建多个创意互动项目，成品可直接用于课堂互动活动。\n\n【参与者要求】\n自带笔记本电脑",
+            "speakerInfo": "刘正云，南通大学附属中学人工智能实践室负责人，南通市市直学校智教未来人工智能工作室主持人，南通市局直学科带头人，南通大学教育科学学院主讲教师，南通大学教育硕士研究生培养导师，江苏省高中信息科技评优课一等奖，第八届全国中小学人工智能教育展示活动教师基本功展评评委。新课标普通高中信息技术部编教材核心作者，清华版初中信息科技教材核心编委。",
+            "speakerPhoto": "speakers/workshop_15_speaker1.png",
+            "speakerPhotos": ["speakers/workshop_15_speaker1.png"]
+      },
+      {
+            "id": 16,
+            "name": "借助 WorkBuddy 与掌控板开展科学实验",
+            "target": "基础教育",
+            "speaker": "张敬云",
+            "location": "308",
+            "time": "13:30-15:00",
+            "sessions": [3],
+            "capacity": 30,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n科学实验是培养学生科学思维与实践能力的重要途径，但专业数据采集设备价格不菲，中小学课堂难以常态化开展。本工作坊以掌控板作为数据采集终端，搭配 WorkBuddy 辅助实验设计、代码生成与数据分析，让科学实验真正走进日常课堂。工作坊围绕\"采集—传输—分析—报告\"完整闭环展开，从单组测量到多终端协同观测，带领教师体验 AI 辅助下低成本科学实验的全流程，并产出一个可直接用于日常教学的实验案例。\n\n【预期产出】\n搭建一个基于掌控板的数据采集终端，掌握 AI 辅助科学探究的完整流程，产出一个可用于日常课堂的探究实验案例。\n\n【参与者要求】\n自带笔记本电脑",
+            "speakerInfo": "张敬云，镇江市实验高级中学信息技术教师，镇江市教坛新秀，镇江市学术技术新秀，镇江市高中信息科技评优课一等奖。第八届全国中小学人工智能教育展示活动评委，全国青少年人工智能创新实践活动优秀指导教师，清华大学出版社初中信息技术教材核心编委。",
+            "speakerPhoto": "speakers/workshop_16_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_16_speaker1.jpeg"]
+      },
+      {
+            "id": 17,
+            "name": "AI 编程与交互课件专题",
+            "target": "基础教育",
+            "speaker": "张志强",
+            "location": "401",
+            "time": "13:30-15:00",
+            "sessions": [3],
+            "capacity": 30,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\nDeepSeek 可快速生成轻量化网页交互课件，上手门槛低，但原生网页无法持久化存储练习、错题等学情数据；扣子编程平台可便捷补充数据存储能力，补齐网页课件短板。本工作坊以高中信息科技《数据编码》为贯穿全程的统一案例，带领中小学教师学习可交互式课件基础概念，讲解交互式课件对比传统课件的优化优势，依次实操使用 DeepSeek 快速搭建简易交互课件原型、利用扣子编程制作带数据留存功能的完整版课件，梳理标准化课件制作流程与通用模板，讲解课件评价标准，帮助教师掌握可迁移的课件制作思路，能够自主把制作经验复用至各学科教学课件开发。\n\n【预期产出】\n借助 DeepSeek 搭建简易无存储交互课件原型，依托扣子编程完成可留存数据的《数据编码》完整交互课件 Demo，掌握通用课件模板，能够自主迁移模板制作其他学科交互课件，配套获得完整分步实操文档与课件评价参考标准。\n\n【参与者要求】\n自带笔记本电脑，预装浏览器，具备基础 AI 使用与简单编程常识，无需精通编程语言。",
+            "speakerInfo": "张志强，山西省榆次第一中学校信息技术教师。具备 AI 编程、网页交互课件开发经验，深耕中小学信息科技课堂教学，熟悉 DeepSeek、扣子编程等常用 AI 开发工具，长期研究交互式课件落地教学与课件模板标准化迁移应用，专注一线数字化教学资源研发。",
+            "speakerPhoto": "",
+            "speakerPhotos": []
+      },
+      {
+            "id": 18,
+            "name": "AI编程+掌控板设计人机互动作品",
+            "target": "基础教育",
+            "speaker": "钟以维",
+            "location": "408",
+            "time": "10:45-12:15",
+            "sessions": [2],
+            "capacity": 20,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n人机互动技术结合AI大模型，能够打破传统鼠标和键盘的限制，以更自然的方式发出操作指令，支持科技教育的创新实施()。本工作坊精选了人机互动设计的各种精品项目，展示各种前沿技术在科技教育中的创意应用，如水果手柄、计算机视觉手势识别、运动传感器姿态检测等。主持人不仅手把手展示一个基于Web页面的手势识别模型的训练与网页应用的二次开发流程，还将介绍掌控板作为智能终端的使用，并展示如何借助大模型提示词辅助编写代码（MicroPython与Python），通过UDP通信协议配置虚拟按键环境，实现电脑控制程序的开发。\n\n【预期产出】\n借助大模型（提示词辅助编程），基于掌控板等智能终端与传感器技术，实现如“电脑魔法控制器”、“太空弹球”体感控制等个性化的人机互动创意应用。\n\n【参与者要求】\n自带笔记本电脑，预装浏览器，带掌控板等智能终端。",
+            "speakerInfo": "钟以维，浙江大学计算机应用技术硕士，清华大学出版社中小学人工智能教材分册主编，浙江教育出版社高中信息科技教材编委，2026年全国第九届中小学人工智能课堂展评活动特等奖获得者。",
+            "speakerPhoto": "speakers/workshop_18_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_18_speaker1.jpeg"]
+      },
+      {
+            "id": 19,
+            "name": "模拟星际种植实验室：AI支持的科创项目化学习样式",
+            "target": "基础教育",
+            "speaker": "徐德亮，李娟燕",
+            "location": "309",
+            "time": "13:30-15:00",
+            "sessions": [3],
+            "capacity": 20,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n面向一线教师、社团辅导员，聚焦小学GAI支持的科创课堂项目落地难点，解决前沿科普素材抽象、AI硬件教学门槛高、PBL重构流程零散等实施痛点，本工作坊聚焦PBL中的GAI使用，构建虚实结合、分层探究的GAI支持PBL实践。以模拟太空种植精品校本课程为核心案例，采用理论筑基+分组实操，带领教师梳理太空种植科学原理、开源软件与智能硬件实操的虚实协同助力，拆解GAI支持下的PBL探索新样式。理论层面依托星际种植校本课程，研习太空种植原理、AI科创教学逻辑与项目化实施路径；实践层面实操太空种植装置搭建、参数调试与数据监测，掌握可落地课堂项目；教研层面梳理出一套可复制、可推广的GAI支持下的科创项目化学习实施样式。\n\n【预期产出】\n参训教师沉浸式体验完整GAI支持PBL实施样式，配套教学设计模板与学习支架，产出适配科创赛事的指导方案、低成本硬件实操，可直接落地校本科技课与社团活动的实施策略；小组完成一套可用于课堂、赛事参考的模拟种植装置。\n\n【参与者要求】\n自带笔记本电脑",
+            "speakerInfo": "徐德亮，嘉兴市实验小学信息科创中心主任，全国青少年高级科技辅导员、浙江省青少年科普教育专家、浙江省项目化学习百强教师、江苏大学教育硕士校外实践导师，嘉兴市科技教育骨干教师、嘉兴市劳动教育导师，任多个期刊、出版物编委。\n李娟燕，嘉兴市实验小学信息科创中心副主任，高级教师，嘉兴市优秀科技辅导员，从事小学信息科技教学、机器人教学等，参与开发多项省市精品课程。",
+            "speakerPhoto": "speakers/workshop_19_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_19_speaker1.jpeg","speakers/workshop_19_speaker2.png"]
+      },
+      {
+            "id": 20,
+            "name": "信息学奥赛训练典型误区剖析与规避指南",
+            "target": "基础教育",
+            "speaker": "王津",
+            "location": "402",
+            "time": "10:45-12:15",
+            "sessions": [2],
+            "capacity": 30,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n随着信息科技新课标的落地与拔尖创新人才培养的需求激增，越来越多的学校和教育机构开始布局信息学奥赛（信奥赛）。然而，在学校项目建设与带队实践中，教师和从业者常面临“选拔标准偏差”、“梯队建设断层”、“重解题轻思维”、“教学资源错配”等典型误区，导致投入大量精力却收效甚微。本工作坊立足于信奥项目的运营规划与教学带队维度，深入剖析信奥培养全流程中的决策与实施误区，为学校教师与从业者提供一套清晰、科学、可落地的信奥项目建设与训练规避指南。\n\n【预期产出】\n参与者将获得一份《梦熊联盟信奥成长笔记》\n\n【参与者要求】\n适合中小学信息技术/信息科技教师、信奥带队教师、科技特色学校项目负责人，以及信奥赛道教育从业者、课程产品经理参与。",
+            "speakerInfo": "梦熊信息学联盟创始人、NOI指导教师、CCF会员、从业青少年教育18年、坚持以政策和数据为依据、信息学宣讲超百万人收看、为近万学子提供信奥学习规划、专注信息学竞赛推广工作。",
+            "speakerPhoto": "speakers/workshop_20_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_20_speaker1.jpeg"]
+      },
+      {
+            "id": 21,
+            "name": "AI编程赋能心理陪伴智能体开发",
+            "target": "基础教育",
+            "speaker": "董丹丹",
+            "location": "303",
+            "time": "10:45-12:15",
+            "sessions": [2],
+            "capacity": 30,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n学生心理AI陪伴系统是智能心理服务应用，基于大模型编程技术，为中小学生提供安全的心理陪伴服务。系统包含学生端（AI聊天、情绪分流、社交演练等）和心理老师管理后台（预警看板、学生数据等）两大模块。本工作坊介绍如何借助AI编程，从零开始开发一个心理陪伴智能体。通过本工作坊，参与者将了解大模型在心理健康教育领域的应用，掌握使用自然语言编程开发智能体应用的基本方法。\n\n【预期产出】\n基于大模型编程，实现学生心理陪伴智能体开发。\n\n【参与者要求】\n自带笔记本电脑，提前安装扣子、Trae（任选一个即可）等工具",
+            "speakerInfo": "温州科技高级中学信息技术教师，温州科技高级中学科创中心成员。曾获温州市高中信息技术优质课一等奖、浙江省高中信息技术优质课二等奖、温州市学科素养比赛一等奖等。",
+            "speakerPhoto": "speakers/workshop_21_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_21_speaker1.jpeg"]
+      },
+      {
+            "id": 22,
+            "name": "智能交互技术赋能中小学科学教育",
+            "target": "基础教育",
+            "speaker": "赵永钢",
+            "location": "403",
+            "time": "9:00-10:30、13:30-15:00",
+            "sessions": [1,3],
+            "capacity": 20,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n虚拟交互技术致力于转变中小学课堂传统虚拟现实技术（VR）探究性功能不足、仅限于“沉浸式观看漫游”、短期趣味体验的现状，实现新时期中小学课标常态化教学需求，落地标准化科学实验教学载体，逐步实现深度学习效果。智能交互技术包括教师控制系统、学生学习系统，多路径交互式VR技术，彻底破解传统教学“抽象难懂、场景缺失、评价片面、辅导滞后”的核心难题，全方位重构新型智慧教学生态，实现教学提质增效。多路径交互VR技术为学生的探究性学习增加了随时随地探究学习的可能性，同时AI智能体为学生提供了及时反馈的智能指导、智能反馈，极大的增强了学生的自主学习兴趣和动力。\n\n【预期产出】\n学习利用VR实验培养学生探究性学习能力。\n\n【参与者要求】\n无",
+            "speakerInfo": "山西润智晋科技有限公司产品经理。",
+            "speakerPhoto": "",
+            "speakerPhotos": []
+      },
+      {
+            "id": 23,
+            "name": "递推数列的隐藏规律——AI4S 数学建模案例",
+            "target": "基础教育",
+            "speaker": "付佳兴",
+            "location": "408",
+            "time": "9:00-10:30",
+            "sessions": [1],
+            "capacity": 30,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n递推数列是中学数学的重要内容，但当数据包含误差时，传统的特征方程法往往失效。本工作坊以2025 AI4S TEEN CAMP 中的“挑战任务五：递推数列的隐藏规律”为核心案例，展示如何将一个看似无解的数学问题转化为机器学习可解的回归问题。通过特征工程将数列问题重构为 Z = p·Y - q·X 的多元线性回归形式，让学生经历从“碰壁”（传统方法失效）到“重构”（AI 方法求解）的完整探究过程。工作坊将同步展示配套的交互式教学工具（HTML 三维可视化）、编程实践脚本（Jupyter Notebook）和数据集，呈现一套可复制、可推广的 AI4S 数学课例方案。\n\n【预期产出】\n理解“特征工程”将数列问题转化为回归问题的核心思想\n体验从数据读取、标准化、模型训练到参数提取的完整机器学习流程\n带走一套可在课堂直接使用的数列课例资源包（PPT + 代码 + 交互工具 + 数据集）\n\n【参与者要求】\n自带笔记本电脑，预装 Anaconda/Jupyter 环境及谷歌浏览器（推荐），具备基础 Python 编程经验者更佳",
+            "speakerInfo": "北京第一实验学校数学教师，AI4S TEEN CAMP 数学课程负责人，AI4S TEEN CUP 科学委员会成员。长期从事 K-12 人工智能与科学融合课程的开发与教学实践，探索将 AI for Science 理念引入中学课堂的有效路径。",
+            "speakerPhoto": "speakers/workshop_23_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_23_speaker1.jpeg"]
+      },
+      {
+            "id": 24,
+            "name": "教育智能体开发——从教学设计到可运行的智能体",
+            "target": "基础教育",
+            "speaker": "严武军",
+            "location": "305",
+            "time": "9:00-10:30、10:45-12:15",
+            "sessions": [1,2],
+            "capacity": 30,
+            "difficulty": "进阶",
+            "description": "【工作坊简介】\n教育智能体开发的核心是什么？是低代码开发、工作流、Skills、RAG知识库、MCP、A2A，以及基于LangChain、LangGraph的原生开发技术吗？是扣子、WorkBuddy、Codex等各类开发平台与工作台吗？还是算力资源等基础条件？这些技术、平台和资源都很重要，但并不是教育智能体开发的核心。教育智能体开发应立足学校特色发展、教师队伍实际、学生学情和学科特点，遵循学习科学规律和学生成长规律，让技术真正服务于教育本质。不能为了使用AI而使用AI，更不能沦为“表演式AI”。本工作坊以太原师范学院附属中学教育智能体平台为实践起点，通过案例拆解、六要素框架构建和现场实操，指导教师将教学目标、学习任务、知识资源与评价证据转化为可运行、可验证、可迭代的教育智能体原型。\n\n【预期产出】\n以小组为单位，围绕一个真实教学场景，完成1份教学设计Spec、1套六要素配置、1条可执行工作流和1个可演示的Agent MVP，并形成测试与迭代记录。\n\n【参与者要求】\n自带笔记本电脑，预装谷歌浏览器（推荐）；提前准备一个真实课题、教学设计草稿及可公开使用的材料；无需编程基础。",
+            "speakerInfo": "太原师范学院计算机科学与技术学院副教授、硕士研究生导师，太原师范学院附属中学科技教育基地负责人，中国计算机学会青少年编程专委会CCF GESP常委、山西省计算机学会理事。长期从事人工智能、青少年编程与科技教育研究和实践，持续推进AI赋能教学及教育智能体应用。",
+            "speakerPhoto": "speakers/workshop_24_speaker1.jpeg",
+            "speakerPhotos": ["speakers/workshop_24_speaker1.jpeg"]
+      }
+];
+
+    const API_USERS = 'https://qf.zmrobo.com/api/x5sz720ikv/all';
+    const API_SELECTIONS = 'https://qf.zmrobo.com/api/mpi3fqz8vm';
+    const API_SELECTIONS_LIST = 'https://qf.zmrobo.com/api/mpi3fqz8vm/all';
+
+    let currentSession = 1;
+    let selections = { 1: null, 2: null, 3: null };
+    let submittedSessions = { 1: false, 2: false, 3: false };
+    let selectionCounts = {};
+    let existingUserSelections = {}; // phone -> { session -> workshopId }
+    let registeredUsers = [];
+    let currentModalWorkshop = null;
+    let verifyingSession = null;
+    let rememberedUser = { name: localStorage.getItem('workshop_user_name') || '', phone: localStorage.getItem('workshop_user_phone') || '' };
+
+    function getWorkshopsForSession(session) {
+      return WORKSHOPS.filter(w => w.sessions.includes(session));
+    }
+
+    function getSelectedCount(workshopId, session) {
+      const key = `${workshopId}-${session}`;
+      return selectionCounts[key] || 0;
+    }
+
+    function renderWorkshops(session) {
+      currentSession = session;
+      const container = document.getElementById('workshopContainer');
+      const workshops = getWorkshopsForSession(session);
+
+      container.innerHTML = workshops.map(w => {
+        const count = getSelectedCount(w.id, session);
+        const isFull = count >= w.capacity;
+        const isSelected = selections[session] && selections[session].id === w.id;
+        const progress = Math.min((count / w.capacity) * 100, 100);
+        const difficultyClass = w.difficulty === '进阶' ? 'difficulty-advanced' : 'difficulty-beginner';
+
+        const isSubmitted = submittedSessions[session];
+        const canSelect = !isSubmitted && (!isFull || isSelected);
+
+        return `
+          <article class="workshop-card ${isSelected ? 'selected' : ''} ${isSubmitted ? 'disabled' : ''}" data-id="${w.id}">
+            <div class="workshop-header">
+              <span class="workshop-number">NO.${String(w.id).padStart(2, '0')}</span>
+              <h4 class="workshop-name" data-open-detail="${w.id}">${w.name}</h4>
+            </div>
+            <div class="workshop-meta">
+              <p><strong>主持人：</strong>${w.speaker}</p>
+              <p><strong>教室：</strong>${w.location}</p>
+              <p><strong>难度：</strong><span class="difficulty-badge ${difficultyClass}">${w.difficulty}</span></p>
+              <p><strong>场次：</strong>第 ${w.sessions.join('、')} 场</p>
+            </div>
+            <div class="workshop-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${progress}%"></div>
+              </div>
+              <div class="progress-text">
+                <span>已选 ${count} / ${w.capacity} 人</span>
+                <span>${isSubmitted ? '已提交' : (isFull ? '已满员' : (isSelected ? '已选择' : '可选'))}</span>
+              </div>
+            </div>
+            <div class="workshop-actions">
+              <button class="btn btn-secondary btn-sm" data-open-detail="${w.id}">详情</button>
+              <button class="btn btn-primary btn-sm" data-select="${w.id}" ${canSelect ? '' : 'disabled'}>
+                ${isSubmitted ? '已提交' : (isSelected ? '已选择' : (isFull ? '已满员' : '选择'))}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      bindCardEvents();
+    }
+
+    function bindCardEvents() {
+      document.querySelectorAll('[data-open-detail]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = parseInt(btn.dataset.openDetail, 10);
+          openDetailModal(id);
+        });
+      });
+
+      document.querySelectorAll('[data-select]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = parseInt(btn.dataset.select, 10);
+          selectWorkshop(id);
+        });
+      });
+    }
+
+    function openDetailModal(workshopId) {
+      const workshop = WORKSHOPS.find(w => w.id === workshopId);
+      if (!workshop) return;
+
+      currentModalWorkshop = workshop;
+      const modal = document.getElementById('detailModal');
+      const title = document.getElementById('detailModalTitle');
+      const body = document.getElementById('detailModalBody');
+      const selectBtn = document.getElementById('detailSelectBtn');
+
+      title.textContent = workshop.name;
+
+      const photos = Array.isArray(workshop.speakerPhotos) ? workshop.speakerPhotos : (workshop.speakerPhoto ? [workshop.speakerPhoto] : []);
+      const photoHtml = photos.length > 0
+        ? `<div class="speaker-photos ${photos.length === 1 ? 'single' : ''}">${photos.map(src => `<img class="speaker-photo" src="${src}" alt="${workshop.speaker} 照片">`).join('')}</div>`
+        : `<div class="speaker-photo placeholder">暂无照片</div>`;
+      const descriptionHtml = workshop.description
+        ? `<div class="workshop-description"><h4>工作坊详情</h4><p>${workshop.description.replace(/\n/g, '<br>')}</p></div>`
+        : `<div class="workshop-description"><h4>工作坊详情</h4><p style="color:#9ca3af">暂无简介</p></div>`;
+      const speakerInfoHtml = workshop.speakerInfo
+        ? `<div class="speaker-info">${workshop.speakerInfo.replace(/\n/g, '<br>')}</div>`
+        : `<div class="speaker-info" style="color:#9ca3af">暂无主持人介绍</div>`;
+
+      body.innerHTML = `
+        <div class="detail-grid">
+          <div class="speaker-card">
+            ${photoHtml}
+            <h4 class="speaker-name">${workshop.speaker}</h4>
+            ${speakerInfoHtml}
+          </div>
+          <div class="workshop-detail-main">
+            <div class="detail-row"><span class="detail-label">编号</span><span>NO.${String(workshop.id).padStart(2, '0')}</span></div>
+            <div class="detail-row"><span class="detail-label">面向对象</span><span>${workshop.target}</span></div>
+            <div class="detail-row"><span class="detail-label">场次</span><span>第 ${workshop.sessions.join('、')} 场</span></div>
+            <div class="detail-row"><span class="detail-label">时间</span><span>${workshop.time}</span></div>
+            <div class="detail-row"><span class="detail-label">教室</span><span>${workshop.location}</span></div>
+            <div class="detail-row"><span class="detail-label">容量</span><span>${workshop.capacity} 人</span></div>
+            <div class="detail-row"><span class="detail-label">难度</span><span>${workshop.difficulty}</span></div>
+            <div class="detail-row"><span class="detail-label">已选</span><span>${getSelectedCount(workshop.id, currentSession)} 人</span></div>
+            ${descriptionHtml}
+          </div>
+        </div>
+      `;
+
+      const isSelected = selections[currentSession] && selections[currentSession].id === workshop.id;
+      const isSubmitted = submittedSessions[currentSession];
+      const count = getSelectedCount(workshop.id, currentSession);
+      const isFull = count >= workshop.capacity;
+      selectBtn.textContent = isSubmitted ? '已提交' : (isSelected ? '已选择' : '选择该工作坊');
+      selectBtn.disabled = isSubmitted || (isFull && !isSelected);
+      selectBtn.onclick = () => {
+        closeModal('detailModal');
+        selectWorkshop(workshop.id);
+      };
+
+      openModal('detailModal');
+    }
+
+    function selectWorkshop(workshopId) {
+      const workshop = WORKSHOPS.find(w => w.id === workshopId);
+      if (!workshop) return;
+      if (submittedSessions[currentSession]) {
+        showSummaryStatus('error', `第 ${currentSession} 场已提交，无法更改。`);
+        return;
+      }
+
+      selections[currentSession] = { ...workshop, session: currentSession };
+      renderWorkshops(currentSession);
+      updateSummary();
+      showSummaryStatus('info', `已选择第 ${currentSession} 场工作坊，点击右侧“确定选课”提交本场。`);
+    }
+
+    function updateSummary() {
+      const panel = document.getElementById('summaryPanel');
+      const list = document.getElementById('summaryList');
+      const hasActivity = Object.values(selections).some(s => s !== null) || Object.values(submittedSessions).some(Boolean);
+
+      if (!hasActivity) {
+        panel.style.display = 'none';
+        return;
+      }
+
+      panel.style.display = 'block';
+      list.innerHTML = [1, 2, 3].map(session => {
+        const s = selections[session];
+        const submitted = submittedSessions[session];
+        let action = '';
+        if (submitted) {
+          action = '<span style="color:#166534;font-weight:500">已提交</span>';
+        } else if (s) {
+          action = `<button class="btn btn-primary btn-sm" data-submit-session="${session}">确定选课</button>`;
+        } else {
+          action = '<span style="color:#9ca3af">尚未选择</span>';
+        }
+        return `<li><span>第 ${session} 场</span><strong>${s ? s.name : '—'}</strong>${action}</li>`;
+      }).join('');
+
+      list.querySelectorAll('[data-submit-session]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const session = parseInt(btn.dataset.submitSession, 10);
+          submitSession(session);
+        });
+      });
+    }
+
+    function showSummaryStatus(type, message) {
+      const status = document.getElementById('summaryStatus');
+      status.className = `status-message ${type}`;
+      status.textContent = message;
+      status.style.display = 'block';
+    }
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function showVerifyStatus(type, message) {
+      const status = document.getElementById('verifyStatus');
+      status.className = `status-message ${type}`;
+      status.textContent = message;
+      status.style.display = 'block';
+    }
+
+    function flattenSubmissions(data) {
+      if (!data) return [];
+      const submissions = Array.isArray(data) ? data : (Array.isArray(data.submissions) ? data.submissions : []);
+      return submissions.flatMap(item => {
+        if (Array.isArray(item.entries)) return item.entries;
+        return item;
+      });
+    }
+
+    async function loadSelectionCounts() {
+      try {
+        const response = await fetch(API_SELECTIONS_LIST, { method: 'GET' });
+        if (!response.ok) throw new Error('加载选课数据失败');
+        const data = await response.json();
+
+        selectionCounts = {};
+        existingUserSelections = {};
+        const submissions = Array.isArray(data) ? data : (Array.isArray(data.submissions) ? data.submissions : []);
+        submissions.forEach(item => {
+          const records = Array.isArray(item.entries) ? item.entries : [item];
+          records.forEach(record => {
+            if (record.workshopId && record.session) {
+              const key = `${record.workshopId}-${record.session}`;
+              selectionCounts[key] = (selectionCounts[key] || 0) + 1;
+
+              const phone = String(record.phone || '').trim().slice(-4);
+              const session = parseInt(record.session, 10);
+              if (phone && session) {
+                if (!existingUserSelections[phone]) existingUserSelections[phone] = {};
+                existingUserSelections[phone][session] = record.workshopId;
+              }
+            }
+          });
+        });
+      } catch (err) {
+        console.error('加载选课数据失败:', err);
+      }
+    }
+
+    async function loadRegisteredUsers() {
+      try {
+        const response = await fetch(API_USERS, { method: 'GET' });
+        if (!response.ok) throw new Error('加载用户数据失败');
+        const data = await response.json();
+        registeredUsers = flattenSubmissions(data);
+      } catch (err) {
+        console.error('加载用户数据失败:', err);
+      }
+    }
+
+    function verifyUser(name, phone) {
+      const inputPhone = String(phone || '').trim().slice(-4);
+      return registeredUsers.some(u => {
+        const uName = (u.name || '').trim();
+        const uPhone = String(u.phone || '').trim().slice(-4);
+        return uName === name.trim() && uPhone === inputPhone;
+      });
+    }
+
+    // Session tab switching
+    document.querySelectorAll('.session-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.session-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        renderWorkshops(parseInt(tab.dataset.session, 10));
+      });
+    });
+
+    // Modal close buttons
+    document.querySelectorAll('[data-close-modal]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const modal = btn.closest('.modal-overlay');
+        if (modal) closeModal(modal.id);
+      });
+    });
+
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal(overlay.id);
+      });
+    });
+
+    // Submit a single session selection
+    function submitSession(session) {
+      if (submittedSessions[session]) {
+        showSummaryStatus('error', `第 ${session} 场已经提交过了。`);
+        return;
+      }
+      if (!selections[session]) {
+        showSummaryStatus('error', `请先选择第 ${session} 场的工作坊。`);
+        return;
+      }
+      verifyingSession = session;
+      document.getElementById('verifyStatus').style.display = 'none';
+
+      const nameInput = document.getElementById('userName');
+      const phoneInput = document.getElementById('userPhone');
+      const hint = document.getElementById('verifyModalHint');
+      const submitBtn = document.querySelector('#verifyForm button[type="submit"]');
+
+      if (rememberedUser.name && rememberedUser.phone) {
+        nameInput.value = rememberedUser.name;
+        phoneInput.value = rememberedUser.phone.slice(-4);
+        if (hint) hint.textContent = '已记住您的报名信息，请核对后提交（手机仅显示后 4 位）。';
+      } else {
+        document.getElementById('verifyForm').reset();
+        if (hint) hint.textContent = '请填写报名信息，系统将核验您是否在参会名单中。';
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '验证并提交';
+      }
+
+      openModal('verifyModal');
+    }
+
+    // Identity verification and submission
+    document.getElementById('verifyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const session = verifyingSession;
+      if (!session || submittedSessions[session] || !selections[session]) {
+        showVerifyStatus('error', '提交状态异常，请关闭后重试。');
+        return;
+      }
+
+      const name = document.getElementById('userName').value.trim();
+      const phone = document.getElementById('userPhone').value.trim();
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+
+      if (!/^\d{4}$/.test(phone) && !/^1[3-9]\d{9}$/.test(phone)) {
+        showVerifyStatus('error', '请输入手机后 4 位。');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '验证中…';
+      showVerifyStatus('info', '正在核验参会名单，请稍候…');
+
+      try {
+        await loadRegisteredUsers();
+
+        if (!verifyUser(name, phone)) {
+          showVerifyStatus('error', '未在参会名单中找到匹配的姓名与手机，请确认信息后重试。');
+          submitBtn.disabled = false;
+          submitBtn.textContent = '验证并提交';
+          return;
+        }
+
+        const phoneShort = phone.slice(-4);
+
+        if (existingUserSelections[phoneShort] && existingUserSelections[phoneShort][session]) {
+          showVerifyStatus('error', `您已经提交过第 ${session} 场的选课，不能重复提交。`);
+          submitBtn.disabled = false;
+          submitBtn.textContent = '验证并提交';
+          return;
+        }
+
+        const payload = {
+          name,
+          phone: phoneShort,
+          session,
+          workshopId: selections[session].id,
+          workshopName: selections[session].name,
+          timestamp: new Date().toISOString()
+        };
+
+        const response = await fetch(API_SELECTIONS, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          submittedSessions[session] = true;
+          if (!existingUserSelections[phoneShort]) existingUserSelections[phoneShort] = {};
+          existingUserSelections[phoneShort][session] = selections[session].id;
+          rememberedUser = { name, phone: phoneShort };
+          localStorage.setItem('workshop_user_name', name);
+          localStorage.setItem('workshop_user_phone', phoneShort);
+          showVerifyStatus('success', `第 ${session} 场选课提交成功！`);
+          setTimeout(() => {
+            closeModal('verifyModal');
+            updateSummary();
+            loadSelectionCounts().then(() => renderWorkshops(currentSession));
+          }, 1200);
+        } else {
+          const text = await response.text().catch(() => '服务器错误');
+          showVerifyStatus('error', `提交失败（${response.status}）：${text}`);
+          submitBtn.disabled = false;
+          submitBtn.textContent = '验证并提交';
+        }
+      } catch (err) {
+        showVerifyStatus('error', `提交出错：${err.message}`);
+        submitBtn.disabled = false;
+        submitBtn.textContent = '验证并提交';
+      }
+    });
+
+    // Initialize
+    (async function init() {
+      await Promise.all([loadSelectionCounts(), loadRegisteredUsers()]);
+      renderWorkshops(1);
+    })();
+  </script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
