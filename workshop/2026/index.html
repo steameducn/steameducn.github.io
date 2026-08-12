@@ -279,6 +279,9 @@
     }
 
     .modal {
+      position: relative;
+      inset: auto;
+      display: block;
       width: 100%;
       max-width: 920px;
       max-height: 90vh;
@@ -286,6 +289,10 @@
       background: #fff;
       border-radius: var(--radius);
       box-shadow: var(--shadow-lg);
+    }
+
+    .modal.modal-sm {
+      max-width: 420px;
     }
 
     .modal-header {
@@ -647,7 +654,7 @@
 
   <!-- Identity Verification Modal -->
   <div class="modal-overlay" id="verifyModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="verifyModalTitle">
+    <div class="modal modal-sm" role="dialog" aria-modal="true" aria-labelledby="verifyModalTitle">
       <div class="modal-header">
         <h3 id="verifyModalTitle">身份验证</h3>
         <button class="modal-close" data-close-modal>&times;</button>
@@ -1306,8 +1313,11 @@
         if (!response.ok) throw new Error('加载用户数据失败');
         const data = await response.json();
         registeredUsers = flattenSubmissions(data);
+        return registeredUsers.length > 0;
       } catch (err) {
         console.error('加载用户数据失败:', err);
+        registeredUsers = [];
+        return false;
       }
     }
 
@@ -1401,7 +1411,14 @@
       showVerifyStatus('info', '正在核验参会名单，请稍候…');
 
       try {
-        await loadRegisteredUsers();
+        const hasUsers = await loadRegisteredUsers();
+
+        if (!hasUsers) {
+          showVerifyStatus('error', '名单未导入，等待管理员操作。');
+          submitBtn.disabled = false;
+          submitBtn.textContent = '验证并提交';
+          return;
+        }
 
         if (!verifyUser(name, phone)) {
           showVerifyStatus('error', '未在参会名单中找到匹配的姓名与手机，请确认信息后重试。');
