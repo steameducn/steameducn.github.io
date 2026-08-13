@@ -587,7 +587,7 @@
           <h1>第十四届STEAM教育大会<br>工作坊报名</h1>
           <p class="hero-subtitle">
             本次大会设置 24 个专题工作坊，分三个场次进行。每位参会者每场只能选择一个工作坊，
-            请根据自身兴趣与时间安排合理选课。
+            请根据自身兴趣与时间安排合理选课。8.18日上午，统一开始选课。
           </p>
           <div class="intro-cards">
             <div class="intro-card">
@@ -1414,7 +1414,7 @@
         const hasUsers = await loadRegisteredUsers();
 
         if (!hasUsers) {
-          showVerifyStatus('error', '名单未导入，等待管理员操作。');
+          showVerifyStatus('error', '名单未导入或选课尚未开始，请稍后再试。');
           submitBtn.disabled = false;
           submitBtn.textContent = '验证并提交';
           return;
