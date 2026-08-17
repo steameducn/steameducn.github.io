@@ -66,6 +66,7 @@
                 <a href="#topics" class="quick-nav-link">专题分享</a>
                 <a href="#roundtable" class="quick-nav-link">圆桌论坛</a>
                 <a href="workshop/2026/index.html" class="quick-nav-link">工作坊</a>
+                <a href="#" class="quick-nav-link" id="live-stream-link">大会直播</a>
             </nav>
 
             <div id="register" class="current-gallery registration-card">
@@ -192,6 +193,49 @@
         </div>
     </footer>
 
+    <!-- Live Stream Modal -->
+    <div id="live-stream-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="live-stream-title" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-container" style="max-width: 960px;">
+            <button class="modal-close" id="live-stream-close" aria-label="关闭">&times;</button>
+            <div class="modal-header">
+                <h3 id="live-stream-title">大会直播</h3>
+            </div>
+            <div class="modal-gallery" style="grid-template-columns: 1fr; padding: 24px;">
+                <img src="images/2026/video_online.jpg" alt="大会直播二维码" style="max-height: none; width: 100%; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+
     <script src="assets/js/main.js"></script>
+    <script>
+        (function() {
+            const link = document.getElementById('live-stream-link');
+            const modal = document.getElementById('live-stream-modal');
+            const closeBtn = document.getElementById('live-stream-close');
+            const backdrop = modal.querySelector('.modal-backdrop');
+
+            function openModal(e) {
+                if (e) e.preventDefault();
+                modal.hidden = false;
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.hidden = true;
+                document.body.style.overflow = '';
+            }
+
+            link.addEventListener('click', openModal);
+            closeBtn.addEventListener('click', closeModal);
+            backdrop.addEventListener('click', closeModal);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && !modal.hidden) {
+                    closeModal();
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
