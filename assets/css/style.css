@@ -764,7 +764,7 @@ body {
     justify-content: center;
     gap: 12px;
     margin: 0 auto 56px;
-    max-width: 900px;
+    max-width: 1200px;
     padding: 16px 24px;
     background: rgba(248, 250, 252, 0.95);
     backdrop-filter: blur(12px);
