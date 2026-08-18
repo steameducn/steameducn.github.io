@@ -574,6 +574,7 @@
         </button>
         <ul class="nav-list">
           <li><a href="../../current.html">返回大会主页面</a></li>
+          <li><a href="#" id="mySelectionsLink">我的选课列表</a></li>
         </ul>
       </nav>
     </div>
@@ -675,6 +676,35 @@
           <div class="modal-footer" style="padding: 1rem 0 0;">
             <button type="button" class="btn btn-secondary btn-sm" data-close-modal>取消</button>
             <button type="submit" class="btn btn-primary btn-sm">验证并提交</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Selections Modal -->
+  <div class="modal-overlay" id="mySelectionsModal" aria-hidden="true">
+    <div class="modal modal-sm" role="dialog" aria-modal="true" aria-labelledby="mySelectionsModalTitle">
+      <div class="modal-header">
+        <h3 id="mySelectionsModalTitle">我的选课列表</h3>
+        <button class="modal-close" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>请填写报名信息，核验后查看已选工作坊。</p>
+        <form id="mySelectionsForm">
+          <div class="form-group">
+            <label for="myName">姓名</label>
+            <input type="text" id="myName" class="form-control" placeholder="请输入姓名" required>
+          </div>
+          <div class="form-group">
+            <label for="myPhone">手机（后 4 位）</label>
+            <input type="tel" id="myPhone" class="form-control" placeholder="请输入手机后 4 位" maxlength="4" required>
+          </div>
+          <div id="mySelectionsStatus" class="status-message" style="display: none;"></div>
+          <div id="mySelectionsResult" style="display: none;"></div>
+          <div class="modal-footer" style="padding: 1rem 0 0;">
+            <button type="button" class="btn btn-secondary btn-sm" data-close-modal>取消</button>
+            <button type="submit" class="btn btn-primary btn-sm">查询</button>
           </div>
         </form>
       </div>
@@ -1484,6 +1514,91 @@
         showVerifyStatus('error', `提交出错：${err.message}`);
         submitBtn.disabled = false;
         submitBtn.textContent = '验证并提交';
+      }
+    });
+
+    // My selections query
+    function showMySelectionsStatus(type, message) {
+      const status = document.getElementById('mySelectionsStatus');
+      status.className = `status-message ${type}`;
+      status.textContent = message;
+      status.style.display = 'block';
+    }
+
+    document.getElementById('mySelectionsLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('mySelectionsForm').reset();
+      document.getElementById('mySelectionsStatus').style.display = 'none';
+      document.getElementById('mySelectionsResult').style.display = 'none';
+      openModal('mySelectionsModal');
+    });
+
+    document.getElementById('mySelectionsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('myName').value.trim();
+      const phone = document.getElementById('myPhone').value.trim();
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const resultDiv = document.getElementById('mySelectionsResult');
+
+      if (!/^\d{4}$/.test(phone)) {
+        showMySelectionsStatus('error', '请输入手机后 4 位。');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '查询中…';
+      showMySelectionsStatus('info', '正在核验并查询，请稍候…');
+      resultDiv.style.display = 'none';
+
+      try {
+        const hasUsers = await loadRegisteredUsers();
+        if (!hasUsers) {
+          showMySelectionsStatus('error', '名单未导入或查询尚未开始，请稍后再试。');
+          submitBtn.disabled = false;
+          submitBtn.textContent = '查询';
+          return;
+        }
+
+        if (!verifyUser(name, phone)) {
+          showMySelectionsStatus('error', '未在参会名单中找到匹配的姓名与手机，请确认信息后重试。');
+          submitBtn.disabled = false;
+          submitBtn.textContent = '查询';
+          return;
+        }
+
+        const phoneShort = phone.slice(-4);
+        await loadSelectionCounts();
+        const userSelections = existingUserSelections[phoneShort] || {};
+        const sessions = Object.keys(userSelections).map(s => parseInt(s, 10)).sort((a, b) => a - b);
+
+        if (sessions.length === 0) {
+          showMySelectionsStatus('info', '未查询到您的选课记录。');
+          submitBtn.disabled = false;
+          submitBtn.textContent = '查询';
+          return;
+        }
+
+        resultDiv.innerHTML = `
+          <h4 style="margin: 1rem 0 0.75rem; font-size: 1rem; color: #0f172a;">已选工作坊</h4>
+          <ul style="margin: 0; padding: 0; list-style: none;">
+            ${sessions.map(session => {
+              const workshopId = userSelections[session];
+              const workshop = WORKSHOPS.find(w => w.id === workshopId);
+              return `<li style="padding: 0.625rem 0; border-bottom: 1px solid var(--color-border);">
+                <strong style="color: #0f172a;">第 ${session} 场</strong><br>
+                <span style="color: var(--color-text-light);">${workshop ? workshop.name : '未知工作坊'}</span>
+              </li>`;
+            }).join('')}
+          </ul>
+        `;
+        resultDiv.style.display = 'block';
+        document.getElementById('mySelectionsStatus').style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.textContent = '重新查询';
+      } catch (err) {
+        showMySelectionsStatus('error', `查询出错：${err.message}`);
+        submitBtn.disabled = false;
+        submitBtn.textContent = '查询';
       }
     });
 
