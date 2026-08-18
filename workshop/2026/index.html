@@ -682,6 +682,15 @@
   </div>
 
   <script>
+    // ==================== 配置参数 ====================
+    // 工作坊人数限制上浮比例（0.2 = 20%）
+    const CAPACITY_OVERFLOW_RATIO = 0.2;
+
+    function getEffectiveCapacity(capacity) {
+      return Math.floor(capacity * (1 + CAPACITY_OVERFLOW_RATIO));
+    }
+    // ==================================================
+
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Embedded workshop data from conference handbook
@@ -1079,9 +1088,10 @@
 
       container.innerHTML = workshops.map(w => {
         const count = getSelectedCount(w.id, session);
-        const isFull = count >= w.capacity;
+        const effectiveCapacity = getEffectiveCapacity(w.capacity);
+        const isFull = count >= effectiveCapacity;
         const isSelected = selections[session] && selections[session].id === w.id;
-        const progress = Math.min((count / w.capacity) * 100, 100);
+        const progress = Math.min((count / effectiveCapacity) * 100, 100);
         const difficultyClass = w.difficulty === '进阶' ? 'difficulty-advanced' : 'difficulty-beginner';
 
         const isSubmitted = submittedSessions[session];
@@ -1104,7 +1114,7 @@
                 <div class="progress-fill" style="width: ${progress}%"></div>
               </div>
               <div class="progress-text">
-                <span>已选 ${count} / ${w.capacity} 人</span>
+                <span>已选 ${count} / ${effectiveCapacity} 人</span>
                 <span>${isSubmitted ? '已提交' : (isFull ? '已满员' : (isSelected ? '已选择' : '可选'))}</span>
               </div>
             </div>
@@ -1173,7 +1183,7 @@
             <div class="detail-row"><span class="detail-label">场次</span><span>第 ${workshop.sessions.join('、')} 场</span></div>
             <div class="detail-row"><span class="detail-label">时间</span><span>${workshop.time}</span></div>
             <div class="detail-row"><span class="detail-label">教室</span><span>${workshop.location}</span></div>
-            <div class="detail-row"><span class="detail-label">容量</span><span>${workshop.capacity} 人</span></div>
+            <div class="detail-row"><span class="detail-label">容量</span><span>${getEffectiveCapacity(workshop.capacity)} 人</span></div>
             <div class="detail-row"><span class="detail-label">难度</span><span>${workshop.difficulty}</span></div>
             <div class="detail-row"><span class="detail-label">已选</span><span>${getSelectedCount(workshop.id, currentSession)} 人</span></div>
             ${descriptionHtml}
@@ -1184,7 +1194,7 @@
       const isSelected = selections[currentSession] && selections[currentSession].id === workshop.id;
       const isSubmitted = submittedSessions[currentSession];
       const count = getSelectedCount(workshop.id, currentSession);
-      const isFull = count >= workshop.capacity;
+      const isFull = count >= getEffectiveCapacity(workshop.capacity);
       selectBtn.textContent = isSubmitted ? '已提交' : (isSelected ? '已选择' : '选择该工作坊');
       selectBtn.disabled = isSubmitted || (isFull && !isSelected);
       selectBtn.onclick = () => {
