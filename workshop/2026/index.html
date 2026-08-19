@@ -557,6 +557,129 @@
         max-height: 95vh;
       }
     }
+
+    .roster-tabs {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .roster-tab {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--color-text, #1e293b);
+      background: #fff;
+      border: 1px solid var(--color-border, #e2e8f0);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .roster-tab:hover {
+      border-color: var(--color-primary, #0f4c81);
+      color: var(--color-primary, #0f4c81);
+    }
+
+    .roster-tab.active {
+      color: #fff;
+      background: linear-gradient(135deg, #ff4ecd, #b5179e);
+      border-color: transparent;
+    }
+
+    .roster-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .roster-group-title {
+      margin: 0 0 0.75rem;
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: #0f172a;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--color-border, #e2e8f0);
+    }
+
+    .roster-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .roster-list li {
+      padding: 0.5rem 0;
+      font-size: 0.9375rem;
+      color: var(--color-text, #1e293b);
+      border-bottom: 1px solid var(--color-border, #e2e8f0);
+    }
+
+    .roster-list li:last-child {
+      border-bottom: none;
+    }
+
+    .roster-session-tag {
+      display: inline-block;
+      margin-right: 0.5rem;
+      padding: 0.125rem 0.5rem;
+      font-size: 0.75rem;
+      color: #fff;
+      background: linear-gradient(135deg, #ff4ecd, #b5179e);
+      border-radius: 0.25rem;
+    }
+
+    .roster-toggle {
+      margin-left: 0.5rem;
+      padding: 0.25rem 0.625rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-primary, #0f4c81);
+      background: transparent;
+      border: 1px solid var(--color-primary, #0f4c81);
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .roster-toggle:hover {
+      color: #fff;
+      background: var(--color-primary, #0f4c81);
+    }
+
+    .roster-names {
+      margin-top: 0.625rem;
+      padding: 0.75rem 1rem;
+      background: var(--color-bg-alt, #f8fafc);
+      border: 1px solid var(--color-border, #e2e8f0);
+      border-radius: 0.5rem;
+    }
+
+    .roster-name-list {
+      margin: 0;
+      padding-left: 1.25rem;
+      font-size: 0.9375rem;
+      color: var(--color-text, #1e293b);
+    }
+
+    .roster-name-list li {
+      margin-bottom: 0.375rem;
+      padding: 0.25rem 0;
+    }
+
+    .roster-name-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .roster-empty {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: var(--color-text-light, #64748b);
+    }
+
+    .roster-group-title .roster-toggle {
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
@@ -575,6 +698,7 @@
         <ul class="nav-list">
           <li><a href="../../current.html">返回大会主页面</a></li>
           <li><a href="#" id="mySelectionsLink">我的选课列表</a></li>
+          <li><a href="#" id="rosterLink">工作坊名单</a></li>
         </ul>
       </nav>
     </div>
@@ -707,6 +831,26 @@
             <button type="submit" class="btn btn-primary btn-sm">查询</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workshop Roster Modal -->
+  <div class="modal-overlay" id="rosterModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rosterModalTitle">
+      <div class="modal-header">
+        <h3 id="rosterModalTitle">工作坊名单</h3>
+        <button class="modal-close" data-close-modal>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="roster-tabs">
+          <button class="roster-tab active" data-roster-view="session">按场次查看</button>
+          <button class="roster-tab" data-roster-view="workshop">按工作坊查看</button>
+        </div>
+        <div id="rosterContent"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" data-close-modal>关闭</button>
       </div>
     </div>
   </div>
@@ -1097,6 +1241,7 @@
     let submittedSessions = { 1: false, 2: false, 3: false };
     let selectionCounts = {};
     let existingUserSelections = {}; // phone -> { session -> workshopId }
+    let rosterSelections = {}; // key: `${workshopId}-${session}`, value: [{ name, session, workshopId }]
     let registeredUsers = [];
     let currentModalWorkshop = null;
     let verifyingSession = null;
@@ -1325,6 +1470,7 @@
 
         selectionCounts = {};
         existingUserSelections = {};
+        rosterSelections = {};
         const submissions = Array.isArray(data) ? data : (Array.isArray(data.submissions) ? data.submissions : []);
         submissions.forEach(item => {
           const records = Array.isArray(item.entries) ? item.entries : [item];
@@ -1338,6 +1484,12 @@
               if (phone && session) {
                 if (!existingUserSelections[phone]) existingUserSelections[phone] = {};
                 existingUserSelections[phone][session] = record.workshopId;
+              }
+
+              const name = (record.name || '').trim();
+              if (name) {
+                if (!rosterSelections[key]) rosterSelections[key] = [];
+                rosterSelections[key].push({ name, session, workshopId: record.workshopId });
               }
             }
           });
@@ -1600,6 +1752,113 @@
         submitBtn.disabled = false;
         submitBtn.textContent = '查询';
       }
+    });
+
+    // Workshop roster
+    const SESSION_NAMES = {
+      1: '第一场（09:00—10:30）',
+      2: '第二场（10:45—12:15）',
+      3: '第三场（13:30—15:00）'
+    };
+
+    function getRosterNames(workshopId, session) {
+      const key = `${workshopId}-${session}`;
+      return (rosterSelections[key] || []).map(r => ({ name: r.name, session: r.session }));
+    }
+
+    function getRosterCount(workshopId, session) {
+      const key = `${workshopId}-${session}`;
+      return (rosterSelections[key] || []).length;
+    }
+
+    function renderRosterBySession() {
+      return [1, 2, 3].map(session => {
+        const workshops = getWorkshopsForSession(session).sort((a, b) => a.id - b.id);
+        return `
+          <div class="roster-group">
+            <h4 class="roster-group-title">${SESSION_NAMES[session]}</h4>
+            <ul class="roster-list">
+              ${workshops.map(w => `
+                <li>
+                  NO.${String(w.id).padStart(2, '0')} ${w.name}
+                  <button type="button" class="btn btn-link btn-sm roster-toggle" data-roster-workshop="${w.id}" data-roster-session="${session}">查看名单（${getRosterCount(w.id, session)}人）</button>
+                  <div class="roster-names" id="roster-${w.id}-${session}" style="display: none;"></div>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderRosterByWorkshop() {
+      const sorted = [...WORKSHOPS].sort((a, b) => a.id - b.id);
+      return sorted.map(w => `
+        <div class="roster-group">
+          <h4 class="roster-group-title">NO.${String(w.id).padStart(2, '0')} ${w.name}</h4>
+          <ul class="roster-list">
+            ${[...w.sessions].sort((a, b) => a - b).map(s => `
+              <li>
+                <span class="roster-session-tag">第 ${s} 场</span>${SESSION_NAMES[s]}
+                <button type="button" class="btn btn-link btn-sm roster-toggle" data-roster-workshop="${w.id}" data-roster-session="${s}">查看名单（${getRosterCount(w.id, s)}人）</button>
+                <div class="roster-names" id="roster-${w.id}-${s}" style="display: none;"></div>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      `).join('');
+    }
+
+    function bindRosterToggles() {
+      document.querySelectorAll('.roster-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const workshopId = parseInt(btn.dataset.rosterWorkshop, 10);
+          const session = btn.dataset.rosterSession;
+          const namesDiv = document.getElementById(`roster-${workshopId}-${session}`);
+          if (!namesDiv) return;
+
+          if (namesDiv.style.display === 'none') {
+            const names = getRosterNames(workshopId, parseInt(session, 10));
+
+            if (names.length === 0) {
+              namesDiv.innerHTML = '<p class="roster-empty">暂无选课记录。</p>';
+            } else {
+              namesDiv.innerHTML = `
+                <ol class="roster-name-list">
+                  ${names.map(item => `<li>${item.name}</li>`).join('')}
+                </ol>
+              `;
+            }
+            namesDiv.style.display = 'block';
+            btn.textContent = '收起名单';
+          } else {
+            namesDiv.style.display = 'none';
+            btn.textContent = '查看名单';
+          }
+        });
+      });
+    }
+
+    function renderRoster(view) {
+      const content = document.getElementById('rosterContent');
+      content.innerHTML = view === 'workshop' ? renderRosterByWorkshop() : renderRosterBySession();
+      bindRosterToggles();
+    }
+
+    document.getElementById('rosterLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.roster-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector('.roster-tab[data-roster-view="session"]').classList.add('active');
+      renderRoster('session');
+      openModal('rosterModal');
+    });
+
+    document.querySelectorAll('.roster-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.roster-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        renderRoster(tab.dataset.rosterView);
+      });
     });
 
     // Initialize
